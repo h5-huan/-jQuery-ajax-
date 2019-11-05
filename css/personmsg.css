@@ -1,0 +1,26 @@
+body{background: #f0f0f5;}
+.headtitle{width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #ffffff;position: fixed;top:0;left: 0;text-align: center;}
+.headtitle p{color: #333333;font-size:0.84rem;text-align: center;}
+.headtitle img{width: 0.49rem;height: 0.84rem;position: absolute;top:0.58rem;left:4%;}
+.headtitle span{display: block;height: 2rem;line-height: 2rem;padding: 0 4%;position: absolute;top:0;right:0;color: #14A85D;font-size:0.65rem;}
+#all{position: absolute;top:2rem;width: 100%; box-sizing: border-box;  bottom:0;  left: 0;  right: 0;overflow-y: scroll;}
+.nav{width: 100%;padding:0 4%;overflow: hidden;background: #fff; border-bottom: 1px solid #e6e6e6;}
+.nav.martop{margin-top:0.42rem;}
+.nav p{color: #333333;font-size:0.65rem;float: left;line-height: 2.19rem; }
+.nav span{color: #333333;font-size:0.65rem;float: right;line-height: 2.19rem;}
+.nav .imgbox{width: 2.05rem;height: 2.05rem;float: right;margin: 0.32rem 0 0.32rem 0;border-radius: 50%;position: relative;}
+#camera,#photo{font-size: 100px;left:0;top:0;opacity: 0;width:100%;height:100%;position: absolute;border-radius: 50%;display:block;}
+.nav .imgbox img{width: 100%;height: 100%;border-radius: 50%;}
+.nav input{height: 2.19rem;border:none;float: right;width: 70%;text-align: right; color: #333333;font-size:0.65rem;}
+.screen{display: none;width: 100%; height: 100%;position: fixed;top: 0;  left: 0; z-index: 1000;background:rgba(0,0,0,.5); overflow: hidden; vertical-align: middle;}
+.screen.active{display: block;}
+.screen .screenbox{width: 100%;position:fixed;bottom:0; left:0;z-index: 1001;overflow: hidden;}
+.screen .screenbox .scrnav{width: 100%;height:2.4rem;line-height:2.4rem;background: #fff;font-size:0.75rem;color: #333333;text-align: center;border-bottom: 1px solid #dbdbdb;position: relative;}
+.screen .screenbox .scrnav.quxiao{color: #EF4F1D;margin-top: 0.46rem;}
+
+
+
+
+
+
+

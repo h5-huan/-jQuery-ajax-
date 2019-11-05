@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/waitpaydetail.css"/>
+    <script type="text/html" id="item">
+        {{each product_list as value i}}
+        <div class="wpmsg" data-id="{{value.product_id}}">
+            <a href="malldetail.html?idx={{value.product_id}}" data-id="{{value.product_id}}">
+                <img src="{{value.img}}" alt=""/>
+                <div class="wpbox">
+                    <div>
+                        <h4>{{value.product_name}}</h4>
+                        <span>×<i>{{value.num}}</i></span>
+                    </div>
+                    <p>物品金额：<span>￥{{value.price}}</span></p>
+                    {{if value.express_fee=='0.00'}}
+                    <p>运费：包邮</p>
+                    {{/if}}
+                    {{if value.express_fee!='0.00'}}
+                    <p>运费：<span>￥{{value.express_fee}}</span></p>
+                    {{/if}}
+                </div>
+            </a>    
+        </div>
+        {{/each}}
+    </script>
+</head>
+<body>
+    <div class="headtitle">
+        <img src="image/fanhuifei.png" alt="" onclick="goback()"/>
+        <p>订单详情</p>
+    </div>
+    <div id="all">
+        <div class="paymsg">
+            <div class="top">
+                <h1>交易信息</h1>
+            </div>
+            <div class="shmsg">
+                <div>
+                    <h2>收货人：</h2>
+                    <p>小黑捏</p>
+                    <span>13798219665</span>
+                </div>
+                <div>
+                    <h2>收货地址：</h2>
+                    <p class="addr">武汉市洪山区现代光谷世贸中心I座2501</p>
+                </div>
+                <div>
+                    <h2>交易时间：</h2>
+                    <p>2018-05-03</p>
+                </div>
+            </div>
+        </div>
+        <div class="paymsg">
+                <div class="top">
+                    <h1>物品信息</h1>
+                    <span>待付款</span>
+                </div>
+                <div class="productlist"></div>
+        </div>
+        <div class="spmsgbox">
+            共<span>1</span>件商品 合计：￥<span></span>（含运费￥<span></span>）
+        </div>
+        <div class="ordermsg">
+            <p>订单编号：<span>2018012356488987564</span></p>
+            <p>创建时间：<span>2018-05-06 10:02:06</span></p>
+        </div>
+        <div class="lybox">
+            <p>买家留言：</p>
+            <span>暂无</span>
+        </div>
+        <a href="" class="topay" onclick="topay()">去付款</a>
+    </div>
+
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+var gettoken=localStorage.getItem('token');
+console.log(gettoken);
+var ddid;
+// 返回箭头
+function goback(){
+    window.history.back(-1);
+}
+// window.onload=function(){
+$(function(){
+    var orderid=getParams('orderid');
+    console.log(orderid);
+    url({
+        url: 'order/orderDetail',
+        data: {"token":gettoken,"order_id":orderid},
+        success: function (res) {
+            console.log(res);
+            $('#all .paymsg .productlist').html(template('item', res));
+            $('.paymsg .shmsg div:nth-child(1) p').html(res.address_info.name);
+            $('.paymsg .shmsg div:nth-child(1) span').html(res.address_info.mob_phone);
+            $('.paymsg .shmsg div:nth-child(2) p').html(res.address_info.province_name+res.address_info.city_name+res.address_info.area_name+res.address_info.address);
+            $('.paymsg .shmsg div:nth-child(3) p').html(res.create_time);
+            $('.paymsg .top span').html(res.state_msg);
+            $('.ordermsg p:nth-child(1) span').html(res.order_sn);
+            $('.ordermsg p:nth-child(2) span').html(res.create_time);
+            $('.spmsgbox span:nth-child(1)').html(res.total_num);
+            $('.spmsgbox span:nth-child(2)').html(res.total_price);
+            $('.spmsgbox span:nth-child(3)').html(res.total_express_fee);
+            ddid=res.order_id;
+            $('.topay').attr('href','firmorder.html?orderid='+res.order_id+'&typer=fkdetail');
+            if(res.msg_content==''){
+                $('.lybox span').html('暂无');
+            }else{
+                $('.lybox span').html(res.msg_content);
+            }
+        }
+    })
+}); 
+function topay(){
+    // window.close(); 
+}
+//商品详情
+// $('#all .paymsg .productlist').on('click','.wpmsg',function(){
+//     var idx=$(this).data('id');
+//     location.href='malldetail.html?idx='+idx;
+// });
+    </script>
+</body>
+</html>

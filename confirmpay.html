@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/confirmpay.css"/>
+    <script type="text/html" id="list">
+        {{each product_list as value i}}
+        <div class="only" data-productid='{{value.product_id}}'>
+            <div class="product">
+                <img src="{{value.img}}" alt=""/>
+                <div class="sp">
+                    <h6>{{value.product_name}}</h6>
+                    <p>×<span>1</span></p>
+                </div>
+                <p class="price">￥<span>{{value.price}}</span></p>
+            </div>
+            <div class="sendbox">
+                <div class="sendnav">
+                    <h6>购买数量：</h6>
+                    <div class="slbox">
+                        <img src="image/jian.png" alt="" class='jian'/>
+                        <span id='buynum'>{{value.num}}</span>
+                        <img src="image/jia.png" alt="" class='jia'/>
+                    </div>
+                </div>
+                <div class="sendnav">
+                    <h6>配送方式：</h6>
+                    {{if value.express_fee==0}}
+                       <p>包邮</p>
+                    {{/if}}
+                    {{if value.express_fee!=0}}
+                       <p>运费：￥{{value.express_fee}}</p>
+                    {{/if}}
+                    
+                </div>
+            </div>
+        </div>    
+        {{/each}}
+    </script>
+</head>
+<body>
+        <div class="headtitle">
+            <img src="image/fanhui.png" alt="" onclick="goback()"/>
+            <p>确认订单</p>
+        </div>
+        <div class="maindtl">
+            <div class="shouhuo">
+                <img src="image/shou.png" alt="" class="sh"/>
+                <div class="addrbox">
+                    <h6></h6>
+                    <p>
+                        <span></span>      
+                        <span></span>
+                    </p>
+                </div>
+                <img src="image/more.png" alt="" class="more"/>
+            </div>
+            <div class="alllist"></div>
+            <div class="sendbox">
+                <div class="sendnav">
+                    <h6>买家留言：</h6>
+                    <div class="lytext"></div>
+                    <textarea class="liuyan active" placeholder="选填，填写内容已和卖家协商确认"></textarea>
+                </div>
+            </div>
+            <div class="pricebox">
+                <h5>共<i>1</i>件商品 小计：<span>￥20.9</span></h5>
+            </div>
+            <div class="paytypebox">
+                <h1>请选择支付方式：</h1>
+                <div class="paytype" data-paytype="wxpay">
+                    <img src="image/weixin.png" alt="" class="wx">
+                    <p>微信支付</p>
+                    <img src="image/queding.png" alt="" class="check">
+                </div>
+                <div class="paytype" data-paytype="aliPay">
+                    <img src="image/zhifubao.png" alt="" class="wx">
+                    <p>支付宝支付</p>
+                    <img src="image/zhifuweixuanzhong.png" alt="" class="check">
+                </div>
+            </div>
+
+        </div>
+        <div class="footpay active">
+            <div class="paynav white">
+                <p>合计金额：<span>￥30.00</span></p>
+            </div>
+            <div class="paynav green" onclick="submitorder()">
+                <p>提交订单</p>
+            </div>
+        </div>
+        <div class="qdpay">确定</div>
+        <div class="alipaybox"></div>
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+    // var addressid;
+    var buytype;
+    var yunfei;
+    var ischeckaddr=true;
+    var pagetype;
+    var gettoken=localStorage.getItem('token');
+    var paysn;
+    var paytype='wxpay';
+     // 返回箭头
+     function goback(){
+            window.history.back(-1);
+    }
+    $(function(){
+        var dfdf=getParams('cpid');
+        var getcheckaddrid=getParams('checkaddrid')
+        console.log(getcheckaddrid);
+        
+        if(dfdf!='cpid'){
+            //详情页进去的支付页面
+            pagetype=true;
+            url({
+                url: 'order/buyStepOne',
+                data:{"token":gettoken,"product_id":dfdf,"num":1},
+                success: function (res) {
+                    console.log(res);
+                    $('.alllist').html(template('list', res));
+                    if(res.address_info==null){
+                        $('.maindtl .shouhuo .addrbox h6').html('请添加收货地址！');
+                    }else{
+                        $('.maindtl .shouhuo .addrbox h6').html(res.address_info.province_name+res.address_info.city_name+res.address_info.area_name+res.address_info.address);
+                        $('.maindtl .shouhuo .addrbox p span:nth-child(1)').html(res.address_info.name);
+                        $('.maindtl .shouhuo .addrbox p span:nth-child(2)').html(res.address_info.mob_phone);
+                        var arr=$('.alllist .only');
+                        for(var i=0,all=0;i<arr.length;i++){
+                            var price=parseFloat($(arr[i]).find('.product .price span').html());
+                            var num=parseFloat($(arr[i]).find('.sendbox .sendnav .slbox span').html());
+                            var ml=(num*price).toFixed(2);
+                            all=parseFloat(all);
+                            parseFloat(all+=num);
+                            $('.pricebox h5 i').html(all);
+                            $(arr[i]).find('.sendbox .sendnav .slbox span').attr('data-price',ml);
+                        }
+                        //根据获取的地址id获取地址
+                        // var savecheckaddrid=localStorage.getItem('savecheckaddrid');
+                        // if(savecheckaddrid){
+                        //     var addrnewid=savecheckaddrid;
+                        //     $('.maindtl .shouhuo').attr('data-addressid',savecheckaddrid);
+                        // }else{
+                            var addrnewid=res.address_info.address_id;
+                            $('.maindtl .shouhuo').attr('data-addressid',res.address_info.address_id);
+                        // }
+                        // url({
+                        //     url: 'user/addressDetail',
+                        //     data:{"token":gettoken,"address_id":addrnewid},
+                        //     success: function (res) {
+                        //         console.log('获取的地址');
+                        //         console.log(res);
+                        //         $('.maindtl .shouhuo .addrbox h6').html(res.province_name+res.city_name+res.area_name+res.address);
+                        //         $('.maindtl .shouhuo .addrbox p span:nth-child(1)').html(res.name);
+                        //         $('.maindtl .shouhuo .addrbox p span:nth-child(2)').html(res.mob_phone);
+                        //         localStorage.removeItem('savecheckaddrid');
+                        //     }
+                        // })
+                    }
+                    $('.pricebox h5 span').html('￥'+res.total_price);
+                    $('.footpay .paynav p span').html('￥'+res.total_price); 
+                    buytype=res.type;
+                    yunfei=res.total_express_fee;
+                    
+
+                     
+                }
+            })
+        }else{
+            //购物车进去的支付页面
+            pagetype=false;
+            var cartidarr=getParams('sendproid');
+            url({
+                url: 'order/buyStepByCart',
+                data:{"token":gettoken,"cart_id_arr":cartidarr,},
+                success: function (res) {
+                    console.log(res);
+                    $('.alllist').html(template('list', res));
+                    if(res.address_info==''){
+                        $('.maindtl .shouhuo .addrbox h6').html('请添加收货地址！');
+                    }else{
+                        $('.maindtl .shouhuo .addrbox h6').html(res.address_info.province_name+res.address_info.city_name+res.address_info.area_name+res.address_info.address);
+                        $('.maindtl .shouhuo .addrbox p span:nth-child(1)').html(res.address_info.name);
+                        $('.maindtl .shouhuo .addrbox p span:nth-child(2)').html(res.address_info.mob_phone);
+                        var arr=$('.alllist .only');
+                        for(var i=0,all=0;i<arr.length;i++){
+                            var price=parseFloat($(arr[i]).find('.product .price span').html());
+                            var num=parseFloat($(arr[i]).find('.sendbox .sendnav .slbox span').html());
+                            var ml=(num*price).toFixed(2);
+                            all=parseFloat(all);
+                            parseFloat(all+=num);
+                            $('.pricebox h5 i').html(all);
+                            $(arr[i]).find('.sendbox .sendnav .slbox span').attr('data-price',ml);
+                        }
+                        //根据获取的地址id获取地址
+                        var savecheckaddrid=localStorage.getItem('savecheckaddrid');
+                        if(savecheckaddrid){
+                            var addrnewid=savecheckaddrid;
+                            $('.maindtl .shouhuo').attr('data-addressid',savecheckaddrid);
+                        }else{
+                            var addrnewid=res.address_info.address_id;
+                            $('.maindtl .shouhuo').attr('data-addressid',res.address_info.address_id);
+                        }
+                        url({
+                            url: 'user/addressDetail',
+                            data:{"token":gettoken,"address_id":addrnewid},
+                            success: function (res) {
+                                console.log('获取的地址');
+                                console.log(res);
+                                $('.maindtl .shouhuo .addrbox h6').html(res.province_name+res.city_name+res.area_name+res.address);
+                                $('.maindtl .shouhuo .addrbox p span:nth-child(1)').html(res.name);
+                                $('.maindtl .shouhuo .addrbox p span:nth-child(2)').html(res.mob_phone);
+                                localStorage.removeItem('savecheckaddrid');
+                            }
+                        })
+
+                    }
+                    $('.pricebox h5 span').html('￥'+res.total_price);
+                    $('.footpay .paynav p span').html('￥'+res.total_price); 
+                    buytype=res.type;
+                    yunfei=res.total_express_fee;
+                }
+            })
+
+        }
+        
+    //点击收货地址
+    $('.maindtl .shouhuo').on('click',function(){
+        if(ischeckaddr==true){
+            location.href='deliveaddress.html?addrtype=checkaddress';
+        }
+        
+    });
+    });
+    
+    //购买数量加减
+    $('.alllist').on('click','.only .sendnav .slbox img.jian',function(){
+        var n=$(this).siblings('span#buynum').text();
+        n--;
+        if(n<=0){
+            n=1;
+        }
+        $(this).siblings('span#buynum').text(n);
+        var price=$(this).parent('.slbox').parent('.sendnav').parent('.sendbox').siblings('.product').find('p.price span').html();
+        var onetotal=(n*price).toFixed(2);//总价钱
+        $(this).siblings('span#buynum').attr('data-price',onetotal);
+        money();
+    });
+    $('.alllist').on('click','.only .sendnav .slbox img.jia',function(){
+        var n=$(this).siblings('span#buynum').text();
+        n++;
+        $(this).siblings('span#buynum').text(n);
+        var price=$(this).parent('.slbox').parent('.sendnav').parent('.sendbox').siblings('.product').find('p.price span').html();
+        var onetotal=(n*price).toFixed(2);//总价钱
+        $(this).siblings('span#buynum').attr('data-price',onetotal);
+        money();
+    });
+    function money(){
+    var moneyarr=$('.alllist .only');
+        for(var i=0,total=0,all=0;i<moneyarr.length;i++){
+            var aa=parseFloat($(moneyarr[i]).find('.sendnav .slbox span#buynum').attr('data-price'));
+            var allbuynum=parseFloat($(moneyarr[i]).find('.sendnav .slbox span#buynum').html());
+            total=parseFloat(total);
+            parseFloat(total+=aa);
+            all=parseFloat(all);
+            parseFloat(all+=allbuynum);
+
+            $('.pricebox h5 i').html(all);
+        }
+        console.log(total);
+        var allmoney=parseInt(total)+parseInt(yunfei);
+        $('.pricebox h5 span').html('￥'+allmoney);
+        $('.footpay .paynav p span').html('￥'+allmoney);
+}
+    // 提交订单
+    function submitorder(){
+        var liuyan=$('.sendbox .sendnav .liuyan').val();
+        var sparr=[];
+        var listarr=$('.alllist .only');
+        for (var i=0;i<listarr.length;i++){
+        var pronum = $(listarr[i]).find('.sendnav .slbox span#buynum').html();
+        var productid=$(listarr[i]).attr('data-productid');
+        var add = { 'product_id': productid, 'num': pronum };
+        sparr.push(add);
+      }
+      var addressid=$('.maindtl .shouhuo').attr('data-addressid');
+      console.log(addressid);
+      var send={"token":gettoken,"address_id":addressid,"product_info":sparr,"msg_content":liuyan,"type":buytype};
+        url({
+            url: 'order/buyStepTwo',
+            data:send,
+            success: function (res) {
+                console.log(res);
+                $('.alllist').html(template('list', res));
+                $('.headtitle p').html('确认支付');
+                $('.maindtl .shouhuo .addrbox h6').html(res.address_info.province_name+res.address_info.city_name+res.address_info.area_name+res.address_info.address);
+                $('.maindtl .shouhuo .addrbox p span:nth-child(1)').html(res.address_info.name);
+                $('.maindtl .shouhuo .addrbox p span:nth-child(2)').html(res.address_info.mob_phone);
+                $('.maindtl .shouhuo img.more').css('display','none');
+                // $('.maindtl .shouhuo').onclick=null;
+                ischeckaddr=false;
+                $('.alllist .only .sendbox .sendnav:nth-child(1)').css('display','none');
+                $('.sendbox .sendnav .liuyan').removeClass('active');
+                $('.pricebox h5 span').html('￥'+res.total_price);
+                $('.footpay').removeClass('active');
+                $('.qdpay').addClass('active');
+                $('.paytypebox').addClass('active');;
+                if(res.msg_content==''){
+                    $('.sendbox .sendnav .lytext').addClass('active').html('暂无');
+                }else{
+                    $('.sendbox .sendnav .lytext').addClass('active').html(res.msg_content);
+                }
+                
+                $('.maindtl .shouhuo').attr('data-addressid',res.address_info.address_id);
+                var shopsubmit='qdsubmit';
+                localStorage.setItem('shopsubmit',shopsubmit);
+                paysn=res.pay_sn;
+
+
+            }
+       })
+        // location.href='firmorder.html?tosend='+JSON.stringify(tosend);
+    }
+//选择支付方式
+$('.paytypebox .paytype').on('click',function(){
+    var typer=$(this).attr('data-paytype');
+    paytype=typer;
+    $(this).addClass('active').siblings('.paytype').removeClass('active');
+    $(this).children('img.check').attr('src','image/queding.png');
+    $(this).siblings('.paytype').children('img.check').attr('src','image/zhifuweixuanzhong.png');
+});
+//点击确定支付按钮
+$('.qdpay').on('click',function(){
+    console.log(paysn,paytype,gettoken);
+    url({
+        url: 'order/payOrder',
+        data: {"token":gettoken,"pay_sn":paysn,"pay_type":paytype,"type":"detail"},
+        success: function (res) {
+            console.log(res);
+            if(paytype=='aliPay'){
+                $('.alipaybox').append(res.alipay_str);
+                var alipaynumber=res.pay_sn;
+                localStorage.setItem('alipaynumber',alipaynumber);
+                //请求支付接口当前订单是否已支付
+                // var alitimepay=window.setInterval(isalipayed,1000);
+            }else if(paytype=='wxpay'){
+                location.href=res.payUrl;
+                var paynumber=res.pay_sn;
+                localStorage.setItem('paynumber',paynumber);
+            }
+            
+        }
+    })
+});
+    </script>
+</body>
+<script type="text/javascript">
+    (function() {
+      var isPageHide = false;
+      window.addEventListener('pageshow', function() {
+        if (isPageHide) {
+            // window.location.reload();
+        }
+        //根据获取的地址id获取地址
+        var savecheckaddrid=localStorage.getItem('savecheckaddrid');
+            if(savecheckaddrid!=null){
+                var addrnewid=savecheckaddrid;
+                $('.maindtl .shouhuo').attr('data-addressid',savecheckaddrid);
+            }
+            url({
+                url: 'user/addressDetail',
+                data:{"token":gettoken,"address_id":addrnewid},
+                success: function (res) {
+                    console.log('获取的地址');
+                    console.log(res);
+                    $('.maindtl .shouhuo .addrbox h6').html(res.province_name+res.city_name+res.area_name+res.address);
+                    $('.maindtl .shouhuo .addrbox p span:nth-child(1)').html(res.name);
+                    $('.maindtl .shouhuo .addrbox p span:nth-child(2)').html(res.mob_phone);
+                    localStorage.removeItem('savecheckaddrid');
+                }
+            })
+        //支付成功跳页面
+        var paynumber=localStorage.getItem('paynumber');
+        var alipaynumber=localStorage.getItem('alipaynumber');
+        //微信
+        if(paynumber!=null){
+            var timepay=window.setInterval(function() {
+                url({
+                    url: 'common/orderQuery',
+                    data: {"pay_sn":paynumber},
+                    success: function (res) {
+                        console.log(res);
+                        if(res.state==20){
+                            layer.msg('支付成功');
+                            location.href='myorder.html';
+                            window.clearInterval(timepay);
+                            localStorage.removeItem('paynumber');
+                        }
+                    },
+                    error: function(res){
+                    }
+                })
+           },1000);
+        }
+        //支付宝
+        if(alipaynumber!=null){
+            var alitimepay=window.setInterval(function() {
+                url({
+                    url: 'common/orderQuery',
+                    data: {"pay_sn":alipaynumber},
+                    success: function (res) {
+                        console.log(res);
+                        if(res.state==20){
+                            layer.msg('支付成功');
+                            window.clearInterval(alitimepay);
+                            localStorage.removeItem('alipaynumber');
+                        }
+                    },
+                    error: function(res){
+                    }
+                })
+           },1000);
+        }
+
+            
+       
+      });
+      window.addEventListener('pagehide', function() {
+        isPageHide = true;
+      });
+    })();
+</script>
+</html>

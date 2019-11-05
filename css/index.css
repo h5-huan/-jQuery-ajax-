@@ -1,0 +1,60 @@
+body{background: #f0f0f5;}
+#header{width: 100%;padding: 0 6.5%; height:2rem;background: #14a85d;position: fixed;top:0;left:0;display: flex;justify-content: space-between; align-items: center;z-index: 100;}
+#header img.logo{width: 1.4rem;height: 1.4rem;border-radius: 50%;}
+#header .searchbox{width:83%;padding:0 2%;height:1.3rem;height:1.3rem;line-height: 1.3rem; background:#f3f3f6;border-radius:0.65rem;display:flex;flex-wrap:wrap; }
+#header .searchbox img{width: 0.63rem;height: 0.7rem;margin: 0.3rem 0.46rem 0 0;}
+#header .searchbox p{font-size: 0.6rem;color: #999999;}
+.bannerbox{margin-bottom:0.54rem;width:94%;height:6rem;border-radius: 0.14rem;overflow: hidden;position: relative;margin: 0.46rem auto 0.54rem auto;}
+.bannerbox .swiper-container{width:100%;height:100%;border-radius: 0.5rem;}
+.bannerbox .swiper-container img{width:100%;height:100%;}
+.swiper-pagination-bullet {  width:0.32rem;  height:0.32rem;  background: #fff; opacity: 1; }
+.swiper-pagination-bullet-active { background: #14a85d;}
+.swiper-container-horizontal>.swiper-pagination-bullets{bottom:0.38rem;}
+.swiper-slide a{display: block;width: 100%;height: 100%;}
+ul.list{width:100%;overflow: hidden;padding-top: 0.69rem;background: #fff;margin-bottom:0.46rem;}
+ul.list li{float:left;width:33.3%;text-align: center;overflow: hidden;}
+ul.list li a{display: block;width:100%;height:100%;text-align: center;}
+ul.list li a img{width:2.42rem;height: 2.42rem;}
+ul.list li a p{line-height:1.86rem;color:#333333;font-size: 0.65rem;}
+.detail{width: 100%;height: 1.68rem;background: #fff;display: flex;flex-wrap: wrap;justify-content: space-around;}
+.detail p{color: #666666;font-size:0.65rem;line-height: 1.59rem;}
+.detail span{display: block; width:70%;height:0.09rem;background: #fff;margin-left:15%; }
+.detail img{width:0.37rem;height: 0.25rem;margin-left: 0.2rem;}
+.detail .active p{color: #14a85d;}
+.detail .active span{background: #14a85d;}
+.detail .xl{display: flex;flex-wrap: wrap;align-items: center;}
+.alllist{width: 100%;padding: 0 4%; overflow: hidden;margin-top:0.69rem;display: flex;flex-wrap: wrap;}
+.alllist h6{display: none;width:14rem;background:none; margin:0 auto;text-align:center;font-size:0.65rem;line-height:4rem;font-weight: normal;}
+.alllist h6.active{display: block;}
+.alllist ul{display: none;}
+.alllist ul.active{display: block;}
+.alllist ul li{width: 6.5rem;height: 11.5rem;overflow: hidden;background: #fff;float: left;margin-right: 0.6rem;margin-bottom: 0.46rem;}
+.alllist ul li a{display: block;width: 100%;height: 100%;}
+.alllist ul li img.sp{width: 7rem;height: 7rem;}
+.alllist ul li p{height: 2rem;color:#333333;font-size:0.75rem;line-height:1.05rem;margin:0.46rem;text-overflow: -o-ellipsis-lastline;overflow: hidden; text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+.alllist ul li .psbox{padding:0 0.46rem;overflow: hidden;padding-bottom: 0.4rem;}
+.alllist ul li .psbox span{color:#EF4F1D;font-size:0.84rem;float: left;}
+.alllist ul li .psbox img.sc{width:0.93rem;height:0.93rem;float: right;}
+.alllist ul li .psbox img.sc.active{display: block;}
+.alllist ul li:nth-child(2n){margin-right: 0;}
+/* .alllist ul li{width: 6.5rem;height:10.5rem;overflow: hidden;background: #fff;float: left;margin-right: 0.69rem;margin-bottom: 0.46rem;}
+.alllist ul li img.sp{width: 6.5rem;height: 6.5rem;}
+.alllist ul li p{color:#333333;font-size:0.75rem;height: 2.1rem; line-height:1.05rem;margin:0.2rem 0.46rem;text-overflow: -o-ellipsis-lastline;overflow: hidden; text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+.alllist ul li .psbox{padding:0 0.46rem;overflow: hidden;padding-bottom: 0.4rem;}
+.alllist ul li .psbox span{color:#EF4F1D;font-size:0.84rem;float: left;}
+.alllist ul li .psbox img.sc{width:0.7rem;height:0.72rem;float: right;margin-top: 0.2rem;}
+.alllist ul li:nth-child(2n){margin-right: 0;} */
+/* 分类导航 */
+.classibox{display: none;width: 100%; height: 100%;position: fixed;top:3.68rem;  left: 0; z-index:90;background:rgba(0,0,0,.5); overflow: hidden; vertical-align: middle;}
+.classibox.active{display: block;}
+.classibox .alltype{width: 100%;overflow: hidden;}
+.alltype ul.fenlei{width: 100%;overflow: hidden;background: #fff;}
+.alltype ul.fenlei li{width: 100%;padding: 0 4%;height: 1.6rem;line-height: 1.6rem;border-top:1px solid #e6e6e6;}
+.alltype ul.fenlei li.active p{ color: #14A85D;}
+.alltype ul.fenlei li p{color: #666666;font-size:0.6rem;float: left;}
+.alltype ul.fenlei li img{display: none;width: 0.75rem;height: 0.54rem;float: right;margin-top: 0.54rem;}
+.alltype ul.fenlei li.active img{display: block;}
+
+
+
+

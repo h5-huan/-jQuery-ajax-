@@ -1,0 +1,69 @@
+body{background: #f0f0f5;}
+.headtitle{display: none;width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #fff;position: fixed; top:0;left: 0;text-align: center;z-index: 10;}
+.headtitle img{width: 1.16rem;height: 1.16rem;position: absolute;top:0.42rem;left:4%;z-index: 15;}
+.headtitle p{color: #333;font-size:0.84rem;text-align: center;}
+.headtitle.active{display: block;}
+.maindtl{width: 100%; overflow: hidden;position: absolute;top:0;border-bottom: 1px solid #e6e6e6; box-sizing: border-box;  bottom:2.96rem;  left: 0;  right: 0;overflow-y: scroll;}
+.maindtl img.goback{display: none; width: 1.16rem;height: 1.16rem;position: absolute;top:0.42rem;left:4%;z-index: 5;}
+.maindtl img.goback.active{display: block;}
+.banner{width: 100%;overflow: hidden;background: #fff;position:relative;height:0;padding-top:100%;}
+/* .banner img{position:absolute;top:0;left:0;width:100%;height:100%;} */
+.banner .swiper-container{position:absolute;top:0;left:0;width:100%;height:100%;}
+.banner .swiper-container img{width:100%;height:100%;}
+.swiper-pagination-bullet {  width:0.32rem;  height:0.32rem;  background: #fff; opacity: 1; }
+.swiper-pagination-bullet-active { background: #14a85d;}
+.swiper-container-horizontal>.swiper-pagination-bullets{bottom:0.38rem;}
+
+
+
+
+.write{width: 100%;overflow: hidden;background: #fff;padding: 0.46rem 0;}
+.write>p{margin:0 0.69rem 0.46rem 0.69rem;text-overflow: -o-ellipsis-lastline; overflow: hidden; text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;color: #333;font-size:0.69rem;}
+.write .money{width: 100%;padding:0 4%; overflow: hidden;color: #EF4F1D;font-size:0.69rem;}
+.write .money span{float: left;}
+.write .money img{width: 0.7rem;height: 0.72rem;float: right;}
+.navbox{width: 100%;height: 2.24rem;background: #fff;margin: 0.35rem 0 0.23rem 0;}
+.navbox .nav{float: left;width: 50%;line-height: 2.2rem;border-bottom: 0.07rem solid #fff;text-align: center;font-size: 0.69rem;color: #333333;}
+.navbox .nav.active{border-bottom: 0.07rem solid #14a85d;color: #14a85d;}
+.slidebox{width: 100%;overflow: hidden;}
+.slidebox .cpxq{display: none; width: 100%;overflow: hidden;padding:0.69rem 4%;}
+.slidebox .cpxq.active{display: block;}
+.slidebox .cpxq img{width: 100%;}
+.slidebox .cpxq p{color: #333333;font-size:0.65rem;}
+.evaluatebox{width: 100%;min-height:4rem;}
+.allpj{display: none;width: 100%;overflow: hidden;background: #fff;}
+.allpj.active{display: block;}
+.allpj .pjbtn{width: 100%;padding: 0 4%; height: 2.4rem;line-height: 2.4rem;border-bottom: 1px solid #cccccc;}
+.allpj .pjbtn li{float: left;margin-right: 1.63rem;}
+.allpj .pjbtn li:last-child{margin-right:0;}
+.allpj .pjbtn li img{width: 0.56rem;height: 0.56rem;color: #14a85d;float: left;margin-top:0.93rem;margin-right:0.23rem;}
+.allpj .pjbtn li span{color: #333333;font-size:0.65rem;float: left;}
+.slidebox .evaluate{ width: 97%;margin: 0 0 0 3%;padding: 0.39rem 3% 0.58rem 0;border-bottom:1px solid #e6e6e6;overflow: hidden;}
+.evaluate .titbox{width: 100%;overflow: hidden;margin-bottom: 0.35rem;}
+.evaluate .titbox img{width:1.63rem;height:1.63rem;border-radius: 50%;float: left;}
+.evaluate .titbox h1{color: #333333;font-size:0.75rem;float: left;font-weight:normal;line-height:1.63rem;margin-left: 0.46rem;}
+.evaluate .titbox span{color: #999999;font-size:0.56rem;float: right;line-height:1.63rem;}
+.evaluate p{color: #666666;font-size:0.65rem;line-height:0.79rem;}
+.footpay{width: 100%;height: 2.28rem;position: fixed; bottom:0;left: 0;}
+.footpay .paynav{width: 50%;height: 2.28rem;float: left;display: flex;align-items: center;justify-content: center;}
+.footpay .paynav.white{background: #fff;}
+.footpay .paynav.green{background: #14a85d;}
+.footpay .paynav.white p{color: #333;}
+.footpay .paynav.green p{color: #fff;}
+.footpay .paynav .gwcbox{width: 1rem;height: 0.9rem;position: relative;}
+.footpay .paynav .gwcbox img{width: 1rem;height: 0.9rem;}
+.footpay .paynav.active .gwcbox span{display: block;}
+.footpay .paynav .gwcbox span{display: none;width:0.75rem;height:0.75rem;color: #fff; text-align:center;font-size: 0.56rem; line-height:0.75rem;  border-radius: 50%;background: #14a85d;position:absolute;top:-0.41rem;right:-0.41rem;z-index:3;}
+.footpay .paynav p{font-size: 0.69rem;}
+
+
+
+
+
+
+
+
+
+
+
+

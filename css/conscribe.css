@@ -1,0 +1,24 @@
+body{background: #f0f0f5;}
+.headtitle{width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #ffffff;position: fixed;top:0;left: 0;text-align: center;}
+.headtitle img{width: 0.49rem;height: 0.84rem;position: absolute;top:0.58rem;left:4%;}
+.headtitle p{color: #333333;font-size:0.84rem;text-align: center;}
+#all{position: absolute;top:2rem;width: 100%;box-sizing: border-box;  bottom:0;  left: 0;  right: 0;overflow-y: scroll;}
+.describ{width: 100%;overflow: hidden;padding: 0.46rem 4%;background: #fff;margin-top: 0.46rem;}
+.describ .tit{width: 100%;overflow: hidden;margin-bottom: 0.46rem;}
+.describ .tit h1,.describ .tit h2{color: #14A85D;font-size:0.79rem;}
+.describ .tit h1{float: left;}
+.describ .tit h2{float: right;}
+.describ p{color: #333333;font-size:0.65rem;line-height: 1rem;}
+.aboutus,.aboutus .rich-text{width: 100%;overflow: hidden;}
+.aboutus .rich-text p{font-size:0.65rem;}
+.describ .gangwei{width: 100%;overflow: hidden;}
+.describ .post{width: 100%;height: 1.4rem;line-height: 1.4rem;}
+.describ .post img{width: 0.39rem;height: 0.67rem;float: right;margin: 0.38rem 0 0 0.46rem;}
+.describ .post h3,.describ .post h4{color: #333333;font-size:0.65rem;font-weight: normal;}
+.describ .post h3{float: left;}
+.describ .post h4{float: right;}
+
+
+
+
+

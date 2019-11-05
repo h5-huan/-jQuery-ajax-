@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/myorder.css"/>
+    <style>
+    .layui-layer-btn .layui-layer-btn0 {
+       border-color: #14a85d;
+       background-color: #14a85d;
+       color: #fff;
+    }
+    </style>
+    <script type="text/html" id="item">
+        {{each res as value i}}
+        <div class="list" data-orderid="{{value.order_id}}" data-state="{{value.state}}">
+                {{if value.state==0}}
+                <a class='alllink' href="havecancel.html?orderid={{value.order_id}}"></a>
+                {{/if}}
+                {{if value.state==10}}
+                <a class='alllink' href="waitpaydetail.html?orderid={{value.order_id}}"></a>
+                {{/if}}
+                {{if value.state==20}}
+                <a class='alllink' href="waitshouhuo.html?orderid={{value.order_id}}"></a>
+                {{/if}}
+                {{if value.state==30}}
+                <a class='alllink' href="waitshouhuo.html?orderid={{value.order_id}}"></a>
+                {{/if}}
+                {{if value.state==35}}
+                <a class='alllink' href="waitappraise.html?orderid={{value.order_id}}"></a>
+                {{/if}}
+                {{if value.state==40}}
+                <a class='alllink' href="haveshouhuo.html?orderid={{value.order_id}}"></a>
+                {{/if}}
+
+                <div class="titbox">
+                    <p>{{value.create_time}}</p>
+                    <span>{{value.state_msg}}</span>
+                </div>
+                {{each value.product_list as value i}}
+                <div class="product">
+                    <img src="{{value.img}}" alt=""/>
+                    <div class="msgbox">
+                        <div class="top">
+                            <h1>{{value.product_name}}</h1>
+                            <h2>￥{{value.price}}</h2>
+                        </div>
+                        <div class="pp">
+                            <p>×{{value.num}}</p>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                <div class="paymsg">
+                        {{if value.express_fee=='0.00'}}
+                        <h3>合计￥{{value.real_amount}}(包邮)</h3>
+                        {{/if}}
+                        {{if value.express_fee!='0.00'}}
+                        <h3>合计￥{{value.real_amount}}(含运费￥{{value.express_fee}})</h3>
+                        {{/if}}
+                </div>
+                <!-- 待付款 -->
+                {{if value.state==10}}
+                <div class="paybox">
+                    <a class="fk" href="firmorder.html?orderid={{value.order_id}}&typer=fukuan">付款</a>
+                    <!-- <span class="fk" data-orderid="{{value.order_id}}">付款</span> -->
+                </div>
+                {{/if}}
+                <!-- 待收货 -->
+                {{if value.state==20}}
+                <div class="paybox">
+                    <span class="qrsh" data-orderid="{{value.order_id}}">确认收货</span>
+                    <a class="ckwl" href="waitshouhuo.html?orderid={{value.order_id}}">查看物流</a>
+                </div>
+                {{/if}}
+                <!-- 待收货 -->
+                {{if value.state==30}}
+                <div class="paybox">
+                    <span class="qrsh" data-orderid="{{value.order_id}}">确认收货</span>
+                    <a class="ckwl" href="waitshouhuo.html?orderid={{value.order_id}}">查看物流</a>
+                </div>
+                {{/if}}
+                <!-- 待评价 -->
+                {{if value.state==35}}
+                <div class="paybox">
+                    <!-- <span class="pj" data-orderid="{{value.order_id}}">评价</span> -->
+                    <!-- <a class="pj">评价</a> -->
+                    <a class="pj" href="appraise.html?orderid={{value.order_id}}&typer=pj">评价</a>
+                    <a class="ckwl" href="waitappraise.html?orderid={{value.order_id}}" style="position: absolute;top:0.46rem;right:4rem;">查看物流</a>
+                </div>
+                {{/if}}
+                <!-- 已完成 -->
+                {{if value.state==40}}
+                <div class="paybox">
+                    <a class="ckwl ywc" href="haveshouhuo.html?orderid={{value.order_id}}">查看物流</a>
+                </div>
+                {{/if}}
+                
+            </div>
+        {{/each}}
+    </script>
+</head>
+<body>
+        <div class="headtitle">
+            <img src="image/fanhui.png" alt="" onclick="goback()"/>
+            <p>我的订单</p>
+        </div>
+        <div class="detail">
+            <div data-id="0" class="active">
+                <p>全部</p>
+            </div>
+            <div data-id="10">
+                <p>待付款</p> 
+            </div>
+            <div data-id="30">
+                <p>待收货</p> 
+            </div>
+            <div data-id="35">
+                <p>待评价</p> 
+            </div>
+        </div>
+        <div class="alllist">
+        
+        </div>
+        <!-- 弹窗 -->
+        <div class="screen">
+            <div class="screenbox">
+                <h1>是否确认收货</h1>
+                <div class="btnbox">
+                    <div class="qrbtn" onclick="shsuccess()">确认</div>
+                    <div class="qrbtn qx" onclick="qxsh()">取消</div>
+                </div>
+                
+            </div>
+        </div>
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+var gettoken=localStorage.getItem('token');
+var datalist={
+    res:[]
+};
+var state=0;
+var pageIndex=1;
+var openfirm=getParams('openfirm');
+var deleteid;
+var totalpage;//总页数
+var isscroll=true;  
+console.log(openfirm);
+function goback(){
+    if(openfirm=='firmpay'){
+        window.close();
+    }else{
+        window.history.back();
+    }
+}
+$(function(){
+    console.log(gettoken);
+    // 返回列表页时，取存储的sessionStorage数据，有，则取数据渲染页面，并滑到预期位置
+    var orderList = JSON.parse(sessionStorage.getItem('orderList'));
+    var orderParam = JSON.parse(sessionStorage.getItem('orderParam'));
+    console.log(orderList,orderParam);
+    if (orderList != null) {
+        var refretext=localStorage.getItem('refretext');
+        if(refretext=='zfrefre'){
+            url({
+                url: 'order/myOrder',
+                data: {"token":gettoken,"state":0,"page":1},
+                success: function (res) {
+                    console.log(res);
+                    state=0;
+                    $('.detail div:nth-child(1)').addClass('active').siblings('div').removeClass('active');
+                    if(res.order_list!=''){
+                        datalist={
+                            res:res.order_list
+                        }
+                        $('.alllist').html(template('item', datalist));
+                    }else{
+                        datalist={
+                            res:[]
+                        }
+                        $('.alllist').html("<p style='width:100%;font-size:0.69rem;color:#333;text-align:center;margin-top:3rem;'>暂无订单</p>");
+                    }
+                    pageIndex=1;
+                    totalpage=res.pageInfo.page_count;
+                    isscroll=true; 
+                }
+            })
+            localStorage.removeItem('refretext');
+        }else{
+        // 加载列表
+        $('.alllist').html(template('item', orderList));
+        datalist=orderList;
+        // 滚动到对应位置，并清除sessionStorage
+        document.body.scrollTop = orderParam.top;
+        pageIndex = orderParam.page;
+        totalpage=orderParam.totalpage;
+        state=orderParam.state;
+        if(state==0){
+            $('.detail div:nth-child(1)').addClass('active').siblings('div').removeClass('active');
+        }else if(state==10){
+            $('.detail div:nth-child(2)').addClass('active').siblings('div').removeClass('active');
+        }else if(state==30){
+            $('.detail div:nth-child(3)').addClass('active').siblings('div').removeClass('active');
+        }else if(state==35){
+            $('.detail div:nth-child(4)').addClass('active').siblings('div').removeClass('active');
+        }
+      }
+   
+    }else{
+        url({
+            url: 'order/myOrder',
+            data: {"token":gettoken,"state":0,"page":pageIndex},
+            success: function (res) {
+                console.log(res);
+                totalpage=res.pageInfo.page_count;
+                if(res.order_list!=''){
+                    datalist={
+                        res:res.order_list
+                    }
+                    $('.alllist').html(template('item', datalist));
+                }else{
+                    datalist={
+                        res:[]
+                    }
+                    $('.alllist').html("<p style='width:100%;font-size:0.69rem;color:#333;text-align:center;margin-top:3rem;'>暂无订单</p>");
+                }
+                $('.detail div:nth-child(1)').addClass('active').siblings('div').removeClass('active');
+                // console.log(datalist);
+            }
+        })
+        
+    }
+    sessionStorage.removeItem('orderList');
+    sessionStorage.removeItem('orderParam');
+    
+});
+
+// 把跳转详情页的数据存起来
+function setStorage(){
+    var orderList = JSON.stringify(datalist);
+    var orderParam = {
+        page:pageIndex,  //当前页码
+        totalpage:totalpage,//总页码
+        top: $(window).scrollTop(),
+        state:state
+        // nomore: !$('#J_noMore').hasClass('hide')
+    };
+    orderParam = JSON.stringify(orderParam);
+    sessionStorage.setItem('orderList', orderList);//sessionStorage只能存储string字符串
+    sessionStorage.setItem('orderParam', orderParam);
+}
+
+//点击导航
+$('.detail div').on('click',function(){
+    $(this).addClass('active').siblings().removeClass('active');
+    $('.alllist')[0].scrollTop=0; 
+    var idx=$(this).data('id');
+    console.log(idx);
+    state=idx;
+    pageIndex=1;
+    isscroll=true; 
+    url({
+        url: 'order/myOrder',
+        data: {"token":gettoken,"state":idx,"page":1},
+        success: function (res) {
+            console.log(res);
+            totalpage=res.pageInfo.page_count;
+            if(res.order_list!=''){
+                datalist={
+                    res:res.order_list
+                }
+                $('.alllist').html(template('item', datalist));
+            }else{
+                datalist={
+                        res:[]
+                    }
+                $('.alllist').html("<p style='width:100%;font-size:0.69rem;color:#333;text-align:center;margin-top:3rem;'>暂无订单</p>");
+            }
+        }
+    })
+});
+//点击到详情页
+$('.alllist').on('click','.list .alllink',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    //将当前数据存起来
+    setStorage();
+})
+//点击付款
+$('.alllist').on('click','.list .paybox a.fk',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    //将当前数据存起来
+    setStorage();
+
+});
+//点击确认收货
+$('.alllist').on('click','.list .paybox span.qrsh',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    var idx=$(this).data('orderid');
+    deleteid=idx;
+    $('.screen').addClass('active');
+});
+//点击弹窗确认
+function shsuccess(){
+    $('.screen').removeClass('active');
+    url({
+        url: 'order/confirmOrder',
+        data: {"token":gettoken,"order_id":deleteid},
+        success: function (res) {
+            console.log(res);
+            url({
+                url: 'order/myOrder',
+                data: {"token":gettoken,"state":state,"page":1},
+                success: function (res) {
+                    console.log(res);
+                    if(res.order_list!=''){
+                        datalist={
+                            res:res.order_list
+                        }
+                        $('.alllist').html(template('item', datalist));
+                    }else{
+                        datalist={
+                            res:[]
+                        }
+                        $('.alllist').html("<p style='width:100%;font-size:0.69rem;color:#333;text-align:center;margin-top:3rem;'>暂无订单</p>");
+                    }
+                    pageIndex=1;
+                }
+            })
+            location.href='appraise.html?orderid='+deleteid+'&typer=pjdetail';
+            
+        }
+    })
+}
+//点击弹窗取消
+function qxsh(){
+    $('.screen').removeClass('active');
+}
+//点击评价
+$('.alllist').on('click','.list .paybox a.pj',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    var idx=$(this).data('orderid');
+    setStorage();
+    // location.href='appraise.html?orderid='+idx;
+    
+});
+//点击已完成,查看物流
+$('.alllist').on('click','.list .paybox a.ckwl',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    setStorage();
+});
+
+//加载下一页
+$(document).ready(function (){      
+    var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)      
+    var nScrollTop = 0;  //滚动到的当前位置      
+    var nDivHight = $(".alllist").height();        
+    $(".alllist").scroll(function(){   
+        if(isscroll==true){  
+            nScrollHight = $(this)[0].scrollHeight;
+            nScrollTop = $(this)[0].scrollTop;   
+            if(nScrollTop + nDivHight >= nScrollHight){
+                isscroll=false; 
+                console.log('滑到底部了');
+                var newPage = pageIndex + 1;
+                pageIndex=newPage;
+                console.log(pageIndex);
+                if(datalist.res!=''){
+                    if(totalpage>=pageIndex){
+                        url({
+                            url: 'order/myOrder',
+                            data: {"token":gettoken,"state":state,"page":newPage},
+                            success: function (res) {
+                                console.log(res);
+                                isscroll=true; 
+                                if (res.order_list.length >= 1) {
+                                    var data = datalist.res.concat(res.order_list)
+                                    datalist.res=data;
+                                    console.log(datalist);
+                                    $('.alllist').html(template('item', datalist));
+                                } 
+                                
+                            }
+                        })
+                    }else {
+                        layer.msg('数据已加载完!');
+                    }
+                }
+            }  
+        } 
+    });    
+});    
+    </script>
+</body>
+<!-- 判断手机浏览器返回上一页数据刷新问题 -->
+<script type="text/javascript">
+(function() {
+      var isPageHide = false;
+      window.addEventListener('pageshow', function() {
+        var refretext=localStorage.getItem('refretext');
+        if(refretext=='zfrefre'){
+            // if (isPageHide) {
+                window.location.reload();
+                // localStorage.removeItem('refretext');
+            // }
+        }
+      });
+      window.addEventListener('pagehide', function() {
+          isPageHide = true;
+      });
+})();
+    
+</script>
+
+</html>

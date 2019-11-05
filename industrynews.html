@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/industrynews.css"/>
+    <!-- 行业新闻 -->
+    <script type="text/html" id="item">
+        {{each res as value i}}
+        <div class="list" data-id="{{value.id}}">
+            <a href="newsdetail.html?idx={{value.id}}">
+                <div class="titbox">
+                    <h1>{{value.name}}</h1>
+                    <span>{{value.create_time}}</span>
+                </div>
+                <p>{{value.desc}}</p>
+            </a> 
+        </div>
+        {{/each}}
+    </script>
+</head>
+<body>
+    <div class="headtitle">
+        <img src="image/fanhuifei.png" alt="" onclick="goback()"/>
+        <p>行业新闻</p>
+    </div>
+    <div id="all">
+        <div class="news"></div>
+        <div class="detailss"></div>
+    </div>
+
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        var pageIndex=1;
+        var datalist={
+                res:[]
+            };
+        var totalpage;//总页数
+        var isscroll=true;      
+         // 返回箭头
+         function goback(){
+            window.history.back(-1);
+        }
+        $(function(){
+            var idx=getParams('idx');
+            // 返回列表页时，取存储的sessionStorage数据，有，则取数据渲染页面，并滑到预期位置
+            var _scList = JSON.parse(sessionStorage.getItem('scList'));
+            var _scParam = JSON.parse(sessionStorage.getItem('scParam'));
+            if (_scList != null) {
+                $('#all .news').html(template('item', _scList));
+                datalist=_scList;
+                // 滚动到对应位置，并清除sessionStorage
+                document.body.scrollTop = _scParam.top;
+                pageIndex = _scParam.page;
+                totalpage=_scParam.totalpage;
+                sessionStorage.removeItem('scList');
+                sessionStorage.removeItem('scParam');
+            }else{
+            if(idx==22){
+                $('.headtitle p').html('行业新闻');
+                url({
+                    url: 'common/aboutUsInfo',
+                    data: {"class_id":idx,"page":1},
+                    success: function (res) {
+                        console.log(res);
+                        totalpage=res.pageInfo.page_count;
+                        if(res.news_info!=''){
+                            datalist={
+                                res:res.news_info
+                            };
+                            $('#all .news').html(template('item', datalist));
+                        }else{
+                            datalist={
+                                res:[]
+                            };
+                        }
+                    }
+                })
+            }else if(idx==30){
+                $('.headtitle p').html('荣誉资质');
+                url({
+                    url: 'common/aboutUsInfo',
+                    data: {"class_id":idx,"page":1},
+                    success: function (res) {
+                        console.log(res);
+                        $('#all .detailss').html(res.news_info.content);
+                    }
+                })
+            }else if(idx==28){
+                $('.headtitle p').html('公司简介');
+                url({
+                    url: 'common/aboutUsInfo',
+                    data: {"class_id":idx,"page":1},
+                    success: function (res) {
+                        console.log(res);
+                        $('#all .detailss').html(res.news_info.content);
+                    }
+                })
+            }
+        }
+        console.log(_scList,_scParam);
+
+        });
+//点击行业新闻详情
+$('#all .news').on('click','.list',function(){
+    var idx=$(this).data('id');
+    location.href='newsdetail.html?idx='+idx;
+    var newdetail='newdetail';
+    localStorage.setItem('newdetail',newdetail);
+    setStorage();
+});    
+// 把跳转详情页的数据存起来
+function setStorage(){
+    var scList = JSON.stringify(datalist);
+    var scParam = {
+        page:pageIndex,  //当前页码
+        totalpage:totalpage,//总页码
+        top: $(window).scrollTop(),
+    };
+    scParam = JSON.stringify(scParam);
+    sessionStorage.setItem('scList', scList);//sessionStorage只能存储string字符串
+    sessionStorage.setItem('scParam', scParam);
+}
+
+ //加载下一页数据
+$(document).ready(function (){      
+    var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)      
+    var nScrollTop = 0;  //滚动到的当前位置      
+    var nDivHight = $("#all").height();        
+    $("#all").scroll(function(){
+        if(isscroll==true){
+            nScrollHight = $(this)[0].scrollHeight;
+            nScrollTop = $(this)[0].scrollTop;   
+            if(nScrollTop + nDivHight >= nScrollHight){
+                console.log('滑到底部了');
+                var idx=getParams('idx');
+                console.log(idx);
+                if(idx==22){
+                    isscroll=false; 
+                    var newPage = pageIndex + 1;
+                    pageIndex=newPage;
+                    console.log(pageIndex);
+                    if(datalist.res!=''){
+                        if(totalpage>=pageIndex){
+                            url({
+                                url: 'common/aboutUsInfo',
+                                data:{"class_id":idx,"page":newPage},
+                                success: function (res) {
+                                    console.log(res);
+                                    isscroll=true; 
+                                    if (res.news_info.length >= 1) {
+                                        var data = datalist.res.concat(res.news_info)
+                                        datalist.res=data;
+                                        console.log(datalist);
+                                        $('#all').html(template('item', datalist));
+                                    } 
+                                }
+                            })
+                        }else {
+                            layer.msg('数据已加载完!');
+                        }
+                    }
+                }
+            }   
+        }
+    });    
+});         
+    </script>
+</body>
+<script type="text/javascript">
+    (function() {
+          var isPageHide = false;
+          window.addEventListener('pageshow', function() {
+            var newdetail=localStorage.getItem('newdetail');
+            if(newdetail=='newdetail'){
+                if (isPageHide) {
+                    window.location.reload();
+                }
+            }
+          });
+          window.addEventListener('pagehide', function() {
+              isPageHide = true;
+          });
+    })();
+        
+    </script>
+</html>

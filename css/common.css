@@ -1,0 +1,321 @@
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+body {
+    font: 14px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body * {
+    -webkit-text-size-adjust: none;
+    -webkit-overflow-scrolling: touch; 
+}
+input{border-radius:0;}
+
+*,
+*:before,
+*:after {
+    box-sizing: border-box
+}
+*{
+    -webkit-overflow-scrolling: touch;
+}
+
+body,
+ul,
+ol,
+p,
+dl,
+dt,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+blockquote,
+input,
+button,
+form,
+pre {
+    margin: 0;
+    padding: 0
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 100%
+}
+
+ul,
+ol {
+    list-style: none;
+    list-style-position: inside
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+main,
+menu,
+nav,
+section,
+summary {
+    display: block
+}
+
+audio,
+canvas,
+progress,
+video {
+    display: inline-block;
+    vertical-align: baseline
+}
+
+audio:not([controls]) {
+    display: none;
+    height: 0
+}
+
+[hidden],
+template {
+    display: none
+}
+
+a {
+    background-color: transparent;
+    text-decoration: none
+}
+
+a:active,
+a:hover {
+    outline: 0
+}
+
+abbr[title] {
+    border-bottom: none;
+    text-decoration: underline;
+    text-decoration: underline dotted
+}
+
+b,
+strong {
+    font-weight: inherit
+}
+
+b,
+strong {
+    font-weight: bolder
+}
+
+dfn {
+    font-style: italic
+}
+
+mark {
+    background-color: #ff0;
+    color: #000
+}
+
+small {
+    font-size: 80%
+}
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}
+
+sup {
+    top: -0.5em
+}
+
+sub {
+    bottom: -0.25em
+}
+
+img {
+    border: 0
+}
+/*自适应页面大小*/
+
+@media screen and (min-width:320px) {
+    html {
+        font-size: 21.33px !important;
+    }
+    body {
+        font-size: 12px;
+    }
+}
+
+@media screen and (min-width:360px) {
+    html {
+        font-size: 24px !important;
+    }
+    body {
+        font-size: 12px;
+    }
+}
+
+@media screen and (min-width:375px) {
+    html {
+        font-size: 25px !important;
+    }
+    body {
+        font-size: 12px;
+    }
+}
+
+@media screen and (min-width:384px) {
+    html {
+        font-size: 25.6px !important;
+    }
+    body {
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width:400px) {
+    html {
+        font-size: 26.67px !important;
+    }
+    body {
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width:414px) {
+    html {
+        font-size: 27.6px !important;
+    }
+    body {
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width:424px) {
+    html {
+        font-size: 28.27px !important;
+    }
+    body {
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width:480px) {
+    html {
+        font-size: 32px !important;
+    }
+    body {
+        font-size: 15.36px;
+    }
+}
+
+@media screen and (min-width:540px) {
+    html {
+        font-size: 36px !important;
+    }
+    body {
+        font-size: 17.28px;
+    }
+}
+
+@media screen and (min-width:720px) {
+    html {
+        font-size: 48px !important;
+    }
+    body {
+        font-size: 23.04px;
+    }
+}
+
+@media screen and (min-width:750px) {
+    html {
+        font-size: 50px !important;
+    }
+    body {
+        font-size: 24px;
+    }
+}
+@media screen and (min-width:900px) {
+    html {
+        font-size: 60px !important;
+    }
+    body {
+        font-size: 26px;
+    }
+}
+@media screen and (min-width:1080px) {
+    html {
+        font-size: 72px !important;
+    }
+    body {
+        font-size: 32px;
+    }
+}
+@media screen and (min-width:1200px) {
+    html {
+        font-size: 80px !important;
+    }
+    body {
+        font-size: 36px;
+    }
+}
+@media screen and (min-width:1500px) {
+    html {
+        font-size: 100px !important;
+    }
+    body {
+        font-size: 48px;
+    }
+}
+html,
+body {
+    height: 100%;
+    background-color: #f2f4f5;
+    font-family: "微软雅黑";
+}
+
+a {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
+
+input,button,textarea{border:0;outline: 0;}
+i.iconfont{vertical-align: middle;}
+
+.layui-layer-msg{min-width:60% !important;}
+.layui-layer-dialog .layui-layer-content{font-size: 0.64rem !important;line-height: 1.2rem !important;}
+.layui-layer-dialog{width:50% !important;margin:0 auto !important;}
+.layui-layer-title{height:1.6rem !important;line-height: 1.6rem !important;font-size: 0.7rem !important;}
+.layui-layer-dialog .layui-layer-content{line-height: 1.2rem !important;font-size: 0.66rem !important;}
+.layui-layer-btn a{height:1rem !important;line-height: 1rem !important;font-size: 0.56rem !important;}
+
+/*公共脚部css*/
+/*脚部*/
+#main{position: absolute;top:2rem;width: 100%;  bottom: 2.3rem;  left: 0;  right: 0;overflow-x: visible;overflow-y: auto;-webkit-overflow-scrolling : touch;}
+#foot{width: 100%;height: 2.28rem;box-sizing: border-box;overflow: hidden;border-top:0.023rem solid #e6e6e6; background: #fff;box-shadow:0 -0.11rem 0.23rem #f4f3f3;-webkit-box-shadow:0 -0.11rem 0.23rem #f4f3f3;-moz-box-shadow:0 -0.11rem 0.23rem #f4f3f3;behavior: url(PIE.htc);position: fixed;bottom:0;left: 0; z-index: 100;}
+#foot ul{width: 100%;height:2.28rem; }
+#foot ul li{width:33.3%;height:2.28rem;text-align: center; float: left;display: flex; flex-direction: column; align-items: center;justify-content: center;}
+#foot ul li a{display: block;width:100%;height:100%;}
+#foot ul li a img{width: 1.26rem;height: 1.26rem;}
+#foot ul li a p{color:#808080;font-size:0.56rem;line-height: 0.7rem;}
+#foot ul li.active p{color:#14a85d;}
+#foot ul li.active i{color:#14a85d;}
+
+

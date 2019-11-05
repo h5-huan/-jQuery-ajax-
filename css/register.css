@@ -1,0 +1,22 @@
+body{background: #fff;}
+.headtitle{width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #ffffff;position: fixed;top:0;left: 0;text-align: center;}
+.headtitle img{width: 0.49rem;height: 0.84rem;position: absolute;top:0.58rem;left:4%;}
+.headtitle p{color: #333333;font-size:0.84rem;text-align: center;}
+#all{position: absolute;top:2rem;width: 100%;box-sizing: border-box;  bottom:0;  left: 0;  right: 0;overflow-y: scroll;}
+.logoimg{width: 3.73rem;height: 3.73rem;margin: 2rem auto;border-radius: 0.23rem;overflow: hidden;}
+.logoimg img{width: 100%;height: 100%;}
+.inputbox{width: 80%;height: 1.63rem; margin: 0.9rem auto 0 auto;border-bottom: 1px solid #d6d6d6;position: relative;}
+.inputbox input{width: 100%;height: 1.63rem;background: none; line-height: 1.63rem;color: #333333;font-size:0.69rem;  padding: 0 8% 0 0;}
+.inputbox input.yzm{width: 70%;float: left;}
+.inputbox span{width: 30%;color: #14A85D;line-height: 1.63rem;font-size:0.69rem;float: right;}
+.inputbox img.dldel{width: 0.75rem;height: 0.75rem;position: absolute;top:0.4rem; right: 0;}
+.inputbox img.eyes{width: 0.86rem;height: 0.6rem;position: absolute;top:0.4rem; right: 0;}
+.loginbtn{display: block;border: none; width: 86%;height: 2.05rem;background:#14a85d;opacity: 0.4;line-height: 2.05rem;text-align: center;font-size:0.75rem;color: #fff; border-radius: 0.14rem;margin:2.63rem auto 0.46rem auto;}
+.loginbtn.active{background:#14a85d;opacity:1;}
+.tkbox{width: 100%;height:1.86rem;line-height:1.86rem;display: flex;align-content: center;justify-content: center;}
+.tkbox img{width:0.75rem;height:0.75rem;margin: 0.56rem 0.46rem 0 0;}
+.tkbox p{font-size:0.65rem;color: #666666;}
+
+
+
+

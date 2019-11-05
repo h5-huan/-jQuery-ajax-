@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/personal.css"/>
+    <script type="text/html" id="item">
+        {{each news_class_list as value i}}
+        <a class="nav" href="#" data-id="{{value.id}}">
+            <p>{{value.name}}</p>
+            <img src="image/more.png" alt=""/>
+        </a>
+        {{/each}}
+    </script>
+</head>
+<body>
+        <div class="headtitle">
+            <p>个人中心</p>
+        </div>
+    <div id="main">
+        <div class="all">
+            <!-- 登录后 -->
+            <a class="person" href="myaccount.html">
+                <img src="image/list.jpg" alt="" class="tx"/>
+                <div class="message">
+                    <h1>活生生</h1>
+                    <p>13129966598</p>
+                </div>
+                <img src="image/more.png" alt="" class="more"/>
+            </a>
+            <!-- 没登录 -->
+            <a class="noperson active" href="login.html">
+                <div class="notx"></div>
+                <p>登录/注册</p>
+                <img src="image/more.png" alt="" class="more"/>
+            </a>
+            <a class="nav" onclick="myorder()">
+                <p>我的订单</p>
+                <img src="image/more.png" alt=""/>
+            </a>
+            <a class="nav" onclick="mycollect()">
+                <p>我的收藏</p>
+                <img src="image/more.png" alt=""/>
+            </a>
+            <a class="nav" onclick="deliveaddress()">
+                <p>收货地址</p>
+                <img src="image/more.png" alt=""/>
+            </a>
+        </div>
+        <div class="all">
+            <!-- <a class="nav" href="industrynews.html">
+                <p>行业新闻</p>
+                <img src="image/more.png" alt=""/>
+            </a>
+            <a class="nav" href="conscribe.html">
+                <p>募创客</p>
+                <img src="image/more.png" alt=""/>
+            </a>
+            <a class="nav" href="#">
+                <p>荣誉资质</p>
+                <img src="image/more.png" alt=""/>
+            </a>
+            <a class="nav" href="#">
+                <p>公司简介</p>
+                <img src="image/more.png" alt=""/>
+            </a> -->
+        </div>
+    </div>
+
+    <!--脚部-->
+    <div id="foot">
+        <ul>
+            <li>
+                <a href="index.html">
+                    <img src="image/button1.png" alt=""/>
+                    <p>首页</p>
+                </a>
+            </li>
+            <li>
+                <a onclick="shopcart()">
+                        <img src="image/button2.png" alt=""/>
+                    <p>购物车</p>
+                </a>
+            </li>
+            <li class="active">
+                <a href="#">
+                        <img src="image/button3_click.png" alt=""/>
+                    <p>我的</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+       //获取token
+       var gettoken=localStorage.getItem('token');
+       console.log(gettoken);
+       //没登录的时候进去个人账号
+    //    function personal(){
+    //         location.href='myaccount.html';
+    //    }
+       //跳转登录页面
+    //    function login(){
+    //     location.href='login.html';
+    //    }
+       //点击购物车导航
+       function shopcart(){
+            if(gettoken!=null){
+                location.href='shopcart.html';
+            }else{
+                location.href='login.html';
+            }
+        }
+       //我的订单
+       function myorder(){
+           if(gettoken!=null){
+               location.href='myorder.html';
+           }else{
+               location.href='login.html';
+           }
+       }
+       //我的收藏
+       function mycollect(){
+          if(gettoken!=null){
+              location.href='mycollect.html';
+          }else{
+              location.href='login.html';
+          }
+       }
+       //收货地址
+       function deliveaddress(){
+            if(gettoken!=null){
+                location.href='deliveaddress.html';
+            }else{
+                location.href='login.html';
+            }
+       }
+       $(function(){
+          if(gettoken!=null){
+            url({
+            url: 'user/index',
+            data: {"client":'m',"token": gettoken},
+            success: function (res) {
+                var phonenum=res.mobile;
+                var reg = /^(\d{3})\d{4}(\d{4})$/;
+                phonenum = phonenum.replace(reg, "$1****$2");
+                $('#main .all .person .message p').html(phonenum);
+                $('#main .all .person .message h1').html(res.nickname);
+                $('#main .all .person img.tx').attr('src',res.avatar);
+                if(gettoken!=''){
+                    $('.all .noperson').removeClass('active');
+                    $('.all .person').addClass('active');
+                }
+            }
+           })
+        }
+          
+        
+        //关于我们
+        url({
+            url: 'common/aboutUs',
+            data: {},
+            success: function (res) {
+                console.log(res);
+                $('#main .all:nth-child(2)').html(template('item', res));
+            }
+        })
+       });
+        $('#main .all:nth-child(2)').on('click','.nav',function(){
+            var idx=$(this).data('id');
+            if(idx==22 || idx==30 || idx==28){
+                location.href='industrynews.html?idx='+idx;
+            }
+            if(idx==27){
+                location.href='conscribe.html?idx='+idx;
+            }
+        });
+    </script>
+</body>
+<script type="text/javascript">
+(function() {
+      var isPageHide = false;
+      window.addEventListener('pageshow', function() {
+        var personalmsg=localStorage.getItem('personalmsg');
+        if(personalmsg=='changemsg'){
+            if (isPageHide) {
+                window.location.reload();
+                localStorage.removeItem('personalmsg');
+            }
+        }
+      });
+      window.addEventListener('pagehide', function() {
+          isPageHide = true;
+      });
+})();
+    // (function() {
+    //   var isPageHide = false;
+    //   window.addEventListener('pageshow', function() {
+    //     if (isPageHide) {
+    //       window.location.reload();
+    //     }
+    //   });
+    //   window.addEventListener('pagehide', function() {
+    //     isPageHide = true;
+    //   });
+    // })();
+</script>
+</html>

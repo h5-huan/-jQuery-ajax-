@@ -1,0 +1,49 @@
+body{background: #f0f0f5;}
+.headtitle{width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #ffffff;position: fixed;top:0;left: 0;text-align: center;}
+.headtitle img{width: 0.49rem;height: 0.84rem;position: absolute;top:0.58rem;left:4%;}
+.headtitle p{color: #333333;font-size:0.84rem;text-align: center;}
+#all{position: absolute;top:2rem;width: 100%;box-sizing: border-box;  bottom:0;  left: 0;  right: 0;overflow-y: scroll;}
+.paymsg{width: 100%;background: #fff;margin-top:0.37rem; }
+.paymsg .top{width: 100%;padding: 0 4%;height: 1.98rem;line-height: 1.98rem;border-bottom: 1px solid #e6e6e6;}
+.paymsg .top h1{color: #333333;font-size:0.79rem;float: left;}
+.paymsg .top span{color: #EF4F1D;font-size:0.65rem;float: right;}
+.paymsg .shmsg{width: 100%;padding: 0.23rem 4%;overflow: hidden;}
+.paymsg .shmsg div{width: 100%;overflow: hidden;}
+.paymsg .shmsg h2{width:23%; color: #999999;font-size:0.65rem;float: left;font-weight: normal;line-height: 1.3rem;}
+.paymsg .shmsg p,.paymsg .shmsg span{color: #333333;font-size:0.65rem;line-height: 1.3rem;}
+.paymsg .shmsg p{float: left;}
+.paymsg .shmsg p.addr{width: 77%;}
+.paymsg .shmsg span{float: right;}
+.wpmsg{width: 100%;padding: 0.69rem 4%;overflow: hidden;}
+.wpmsg img{width:3.36rem;height:3.36rem ;float: left;border: 1px solid #e6e6e6;}
+.wpmsg .wpbox{width: 72%;height: 3.5rem;float: right;}
+.wpmsg .wpbox div{width: 100%;overflow: hidden;}
+.wpmsg .wpbox div h4{color: #333333;font-size:0.75rem;font-weight: normal;margin-bottom: 0.3rem;float: left;width: 100%; overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.wpmsg .wpbox div span{color: #666666;font-size:0.69rem;float: right;}
+.wpmsg .wpbox div span i{font-style: normal;}
+.wpmsg .wpbox p{color: #999999;font-size:0.65rem;text-align: right;line-height:0.93rem;}
+.wpmsg .wpbox p span{color: #EF4F1D;}
+.spmsgbox{width: 100%;padding: 0 4%;height: 2rem;line-height: 2rem;text-align: right;color: #666666;font-size: 0.65rem;}
+.spmsgbox span{color: #333333;font-size: 0.65rem;}
+.ordermsg{width: 100%;padding: 0.23rem 0;overflow: hidden;background: #fff;margin:0 0 0.37rem 0;}
+.ordermsg p{padding-left: 4%; color: #999999;font-size:0.65rem;line-height: 1.4rem;}
+.ordermsg p span{color: #333333;}
+.lybox{width: 100%;padding: 0.5rem 0;overflow: hidden;background: #fff;}
+.lybox p{padding-left:4%;width: 25%; color: #333333;font-size:0.65rem;float: left;}
+.lybox span{padding-right:4%;width: 74%;float: left; color: #333333;font-size:0.65rem; }
+.wyliumsg{width: 100%;padding: 0.23rem 0;overflow: hidden;background: #fff;margin:0.46rem 0 2.17rem 0;}
+.wyliumsg h1{color: #333333;font-size:0.79rem;padding: 0 4% 0.79rem 4%;}
+.wyliumsg h2{color: #999999;font-size:0.65rem;padding: 0 4%;line-height:1rem;font-weight: normal; }
+.wyliumsg h2 span{color: #333333; }
+.wyliumsg ul{width: 100%;padding: 0 4%;overflow: hidden;}
+.wyliumsg ul li{width: 100%;position: relative;min-height: 1.4rem;overflow: hidden;top:0.3rem;}
+.wyliumsg ul li p{color: #666666;font-size:0.56rem;float: left;width: 64%;overflow: hidden;margin-bottom: 0.69rem;}
+.wyliumsg ul li p.time{width: 34%;padding-right: 10%;}
+.wyliumsg ul li .linebox{width: 0.28rem;height:100%;position: absolute;top:0;left: 4rem;z-index: 3;}
+.wyliumsg ul li .linebox span{display: block; width: 0.28rem;height: 0.28rem;border-radius: 50%;background:#cccccc;position: absolute;top:0;}
+.wyliumsg ul li .linebox i{display: block;width: 2px;height: 100%;background:#cccccc;position: relative;left:0.14rem;top:0;}
+.wyliumsg ul li.active p{color: #333333;}
+.wyliumsg ul li.active .linebox span{background:#ef4f1d;}
+.wyliumsg ul li.active .linebox i{background:#ef4f1d;top:0.3rem;}
+a.topay{display: block; width: 86%;height: 2.05rem;line-height: 2.05rem;text-align: center;font-size:0.75rem;color: #fff; background:#14a85d;border-radius: 0.14rem;margin:0 auto;}
+

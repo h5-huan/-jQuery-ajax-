@@ -1,0 +1,18 @@
+body{background: #f0f0f5;}
+#header{width: 100%;padding: 0 6.5%; height:2rem;background: #14a85d;position: fixed;top:0;left:0;z-index: 100;}
+/* #header img.logo{width: 1.4rem;height: 1.4rem;border-radius: 50%;float: left;} */
+#header img.logo{width: 0.49rem;height: 0.84rem;float: left;margin:0.58rem 0 0 0;}
+#header .searchbox{width:70%;padding:0 2%;height:1.3rem;line-height: 1.3rem; background:#f3f3f6;border-radius:0.65rem;display:flex;flex-wrap:wrap;float: left;margin:0.35rem 0 0 4%; }
+#header .searchbox img{width: 0.63rem;height: 0.7rem;margin: 0.3rem 0.46rem 0 0;}
+#header .searchbox input{width: 80%; font-size: 0.6rem;color: #333;padding: 0 0.1rem;background: none;}
+#header p{float: right;font-size: 0.6rem;color: #fff;float: right;line-height: 2rem;padding: 0 0.46rem;}
+.main{position: absolute;top:2rem;width: 100%; box-sizing: border-box;  bottom:0;  left: 0;  right: 0;overflow-y: scroll;}
+.alllist{width: 100%;padding: 0 4%; overflow: hidden;margin-top:0.69rem;display: flex;flex-wrap: wrap;}
+.alllist ul li{width: 7rem;height: 11.5rem;overflow: hidden;background: #fff;float: left;margin-right: 0.8rem;margin-bottom: 0.46rem;}
+.alllist ul li img.sp{width: 7rem;height: 7rem;}
+.alllist ul li p{height: 2rem;color:#333333;font-size:0.75rem;line-height:1.05rem;margin:0.46rem;text-overflow: -o-ellipsis-lastline;overflow: hidden; text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+.alllist ul li .psbox{padding:0 0.46rem;overflow: hidden;padding-bottom: 0.4rem;}
+.alllist ul li .psbox span{color:#EF4F1D;font-size:0.84rem;float: left;}
+.alllist ul li .psbox img.sc{width:0.93rem;height:0.93rem;float: right;}
+.alllist ul li .psbox img.sc.active{display: block;}
+.alllist ul li:nth-child(2n){margin-right: 0;}

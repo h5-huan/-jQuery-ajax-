@@ -1,0 +1,21 @@
+body{background: #f0f0f5;}
+.headtitle{width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #ffffff;position: fixed;top:0;left: 0;text-align: center;}
+.headtitle img{width: 0.49rem;height: 0.84rem;position: absolute;top:0.58rem;left:4%;}
+.headtitle p{color: #333333;font-size:0.84rem;text-align: center;}
+#all{position: absolute;top:2rem;width: 100%;padding: 0.7rem 4%; box-sizing: border-box;  bottom:0;  left: 0;  right: 0;overflow-y: scroll;}
+#all h1{color: #333333;font-size:0.75rem;margin:1.16rem 0 0 0;}
+#all h2{color: #999999;font-size:0.56rem;font-weight: normal;}
+#all img{width: 100%;margin:0.46rem 0 1rem 0;}
+#all p{color: #666666;font-size:0.76rem;line-height: 1rem;}
+
+
+
+
+
+
+
+
+
+
+
+

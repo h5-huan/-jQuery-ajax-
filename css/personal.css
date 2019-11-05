@@ -1,0 +1,21 @@
+body{background: #f0f0f5;}
+.headtitle{width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #14a85d;position: fixed;top:0;left: 0;text-align: center;}
+.headtitle p{color: #ffffff;font-size:0.84rem;text-align: center;}
+#main .all{width: 100%;overflow: hidden;margin-top: 0.46rem;background: #fff;}
+#main .all .person.active,.all .noperson.active{display: block;}
+#main .all .person,.all .noperson{display: none;width: 100%; padding:0.33rem 4%;overflow: hidden;border-bottom: 1px solid #e6e6e6;}
+#main .all .person img.tx{width: 2.05rem;height: 2.05rem;border-radius: 50%; margin-right: 0.69rem;float:left;}
+#main .all .noperson .notx{width: 2.05rem;height: 2.05rem;border-radius: 50%; margin-right: 0.69rem;float:left;background:#CDCDCD;}
+#main .all .person .message{float:left;height: 2.05rem;display: flex;flex-direction: column;justify-content: center;}
+#main .all .person .message h1{color: #333333;font-size: 0.65rem;font-weight: normal;}
+#main .all .person .message p{color: #333333;font-size: 0.65rem;}
+#main .all .noperson p{color: #333333;font-size: 0.65rem;line-height: 2.05rem;float: left;}
+#main .all .person img.more,.all .noperson img.more{width: 0.26rem;height: 0.49rem;float: right;margin-top: 0.69rem;}
+#main .all .nav{display: block; width: 100%;height: 2.19rem; padding:0 4%;overflow: hidden;border-bottom: 1px solid #e6e6e6;display: flex;align-items: center;flex-wrap: wrap;justify-content: space-between;}
+#main .all .nav p{color: #333333;font-size:0.65rem;float: left;}
+#main .all .nav img{width: 0.26rem;height: 0.49rem;float: right;}
+
+
+
+
+

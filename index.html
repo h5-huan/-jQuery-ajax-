@@ -1,0 +1,588 @@
+<!-- <!DOCTYPE html> -->
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script type="text/html" id="slide">
+        {{each ad_list as value i}}
+            <div class="swiper-slide" data-title='{{value.title}}' data-id="{{value.id}}">
+                {{if value.link!=''}}
+                    <a href="{{value.link}}">
+                        <img src="{{value.image}}" alt=""/>
+                    </a>  
+                {{/if}}
+                {{if value.link==''}}
+                    <a>
+                        <img src="{{value.image}}" alt=""/>
+                    </a>  
+                {{/if}}
+                
+            </div>
+        {{/each}}
+    </script>
+    <script type="text/html" id="typelist">
+        {{each product_class_list as value i}}
+        <li>
+            <a href="mall.html?idx={{value.id}}" data-id="{{value.id}}">
+                <img src="{{value.img}}" alt=""/>
+                <p>{{value.name}}</p>
+            </a>
+        </li>
+        {{/each}}
+    </script>
+    <script type="text/html" id="prolist">
+        {{each res as value i}}
+        <li data-id="{{value.product_id}}">
+            <a href='malldetail.html?idx={{value.product_id}}'>
+                    <img src="{{value.img}}" alt="" class="sp"/>
+                    <p>{{value.product_name}}</p>
+                    <div class="psbox">
+                        <span>￥{{value.price}}</span>
+                    </div>
+            </a>
+        </li>
+        {{/each}}
+    </script>
+    <script type="text/html" id="classify">
+        {{each product_class_list as value i}}
+        <li data-id="{{value.id}}">  
+            <p>{{value.name}}</p>
+            <img src="image/typegg.png" alt=""/>
+        </li>
+        {{/each}}
+    </script>
+</head>
+<body>
+    <div id="header">
+        <img src="image/logo.png" alt="" class="logo"/>
+        <a href='search.html' class='searchbox'>
+            <img src="image/search.png" alt=""/>
+            <p>输入关键字搜索</p>
+        </a>
+    </div>
+    <!-- 分类导航 -->
+    <div class="classibox">
+        <div class="alltype">
+                <ul class="fenlei">
+                    <li class="active" data-id="0">
+                        <p>全部</p>
+                        <img src="image/typegg.png" alt=""/>
+                    </li>
+                </ul>
+                <ul class="fenlei classify">
+                </ul>
+        </div>
+    </div>
+    <div id="main">
+                    <div class="bannerbox">
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                    <ul class="list">
+                    </ul>
+        <div class="detail" id='typehash'>
+            <div class="active" data-id="1">
+                <p id="input1">综合排序</p>
+                <!-- <span></span> -->
+            </div>
+            <div data-id="2">
+                <p>销量优先</p>
+                <!-- <span></span> -->
+            </div>
+            <div class="xl" data-id="3">
+                <p>价格</p>
+                <img src="image/xiala.png" alt=""/>
+                <!-- <span></span> -->
+            </div>
+            <div class="xl last">
+                <p>分类</p>
+                <img src="image/xiala.png" alt=""/>
+                <!-- <span></span> -->
+            </div>
+        </div>
+        <div class="alllist">
+            <ul>
+               
+            </ul>
+            <h6></h6>
+        </div>
+        
+    </div>
+
+    <!--脚部-->
+    <div id="foot">
+        <ul>
+            <li class="active">
+                <a href="#">
+                    <img src="image/button1_click.png" alt=""/>
+                    <p>首页</p>
+                </a>
+            </li>
+            <li>
+                <a onclick="shopcart()">
+                        <img src="image/button2.png" alt=""/>
+                    <p>购物车</p>
+                </a>
+            </li>
+            <li>
+                <a href="personal.html">
+                        <img src="image/button3.png" alt=""/>
+                    <p>我的</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/template.js"></script>
+    <script>
+        var gettoken=localStorage.getItem('token');
+        var pageIndex=1;
+        var gd;
+        var fl=0;
+        var datalist={
+            res:[]
+        };
+        var slidetype=1;
+        var typename='分类';
+        var totalpage;//总页数
+        var isscroll=true;  
+        //首页接口
+        $(function(){
+            if(gettoken){
+                var send={
+                    "token": gettoken
+                }
+            }else{
+                var send={
+                }
+            }
+            //轮播图
+            url({
+                url: 'index/index',
+                data: send,
+                success: function (res) {
+                    console.log(res);
+                    $('.swiper-container .swiper-wrapper').html(template('slide', res));
+                    var swiper = new Swiper('.swiper-container', {
+                        autoplay: true,
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true,
+                            renderBullet: function (index, className) {
+                                return '<span class="' + className + '"></span>';
+                            },
+                        },
+                    });
+                }
+            })
+             // 返回列表页时，取存储的sessionStorage数据，有，则取数据渲染页面，并滑到预期位置
+    var aList = JSON.parse(sessionStorage.getItem('aList'));
+    var aParam = JSON.parse(sessionStorage.getItem('aParam'));
+    var _ullist = JSON.parse(sessionStorage.getItem('ullist'));
+    console.log(aList,aParam,_ullist);
+    if (aList != null) {
+        // 加载列表
+        $('.alllist h6').removeClass('active');
+        $('.alllist ul').addClass('active');
+        $('.alllist ul').html(template('prolist', aList));
+        $('ul.list').html(template('typelist', _ullist));
+        $('.alltype ul.fenlei.classify').html(template('classify', _ullist));
+        datalist=aList;
+        // 滚动到对应位置，并清除sessionStorage
+        document.body.scrollTop = aParam.top;
+        pageIndex = aParam.page;
+        totalpage=aParam.totalpage;
+        gd=aParam.gd;
+        fl=aParam.fl;
+        slidetype=aParam.slidetype;
+        typename=aParam.typename;
+        $('.detail div:last-child').children('p').html(typename);
+        if(slidetype==1){
+            $('.detail div:nth-child(1)').addClass('active').siblings('div').removeClass('active');
+        }else if(slidetype==2){
+            $('.detail div:nth-child(2)').addClass('active').siblings('div').removeClass('active');
+        }else if(slidetype==3){
+            $('.detail div:nth-child(3)').addClass('active').siblings('div').removeClass('active');
+            if(gd=1){
+                $('.detail div:nth-child(3)').children('img').attr('src','image/xiala.png');
+            }
+            if(gd=2){
+                $('.detail div:nth-child(3)').children('img').attr('src','image/xialaclick.png');
+            }
+        }else if(slidetype==4){
+            $('.detail div:nth-child(4)').children('img').attr('src','image/xialaclick.png');
+            $('.detail div:nth-child(4)').addClass('active').siblings('div').removeClass('active');
+        }
+        sessionStorage.removeItem('aList');
+        sessionStorage.removeItem('aParam');
+    }else{
+        url({
+                url: 'index/getProductList',
+                data: send,
+                success: function (res) {
+                    console.log(res);
+                    $('ul.list').html(template('typelist', res));
+                    var ullist = JSON.stringify(res);
+                    sessionStorage.setItem('ullist', ullist);
+                    if(res.product_list!=''){
+                        datalist={
+                            res:res.product_list
+                        };
+                        $('.alllist h6').removeClass('active');
+                        $('.alllist ul').addClass('active');
+                        $('.alllist ul').html(template('prolist', datalist));
+                    }else{
+                        datalist={
+                            res:[]
+                        };
+                        $('.alllist h6').addClass('active');
+                        $('.alllist h6').html("暂无商品！");
+                        $('.alllist ul').removeClass('active');
+                    }
+                    $('.alltype ul.fenlei.classify').html(template('classify', res));
+                    totalpage=res.pageInfo.page_count;
+   
+                }
+            })
+    }
+            
+
+            
+        });
+        //点击购物车导航
+        function shopcart(){
+            if(gettoken){
+                location.href='shopcart.html';
+            }else{
+                location.href='login.html';
+            }
+        }
+        //点击排序,销量导航
+          $('#main .detail div:nth-child(1),#main .detail div:nth-child(2)').on('click',function(){
+            var idx=$(this).data('id');
+            $('.classibox').removeClass('active');
+            $(this).addClass('active').siblings('div').removeClass('active');
+            $(this).siblings('div').children('img').attr('src','image/xiala.png');
+            pageIndex=1;
+            isscroll=true; 
+            slidetype=idx;
+            console.log(fl);
+            if(gettoken){
+                var send={
+                    "token": gettoken,
+                    "sort_type":idx,
+                    "product_class_id":fl,
+                    "page":1,
+
+                }
+            }else{
+                var send={
+                    "sort_type":idx,
+                    "product_class_id":fl,
+                    "page":1,
+                }
+            }
+            url({
+                url: 'index/getProductList',
+                data:send,
+                success: function (res) {
+                    console.log(res);
+                    totalpage=res.pageInfo.page_count;
+                    if(res.product_list!=''){
+                        datalist={
+                            res:res.product_list
+                        };
+                        $('.alllist h6').removeClass('active');
+                        $('.alllist ul').addClass('active');
+                        $('.alllist ul').html(template('prolist', datalist));
+                    }else{
+                        datalist={
+                            res:[]
+                        };
+                        $('.alllist h6').addClass('active');
+                        $('.alllist h6').html("暂无商品！");
+                        $('.alllist ul').removeClass('active');
+                    }
+                    
+                   
+                    
+                }
+            })
+            
+            
+        });
+        //点击价格
+        $('#main .detail div:nth-child(3)').on('click',function(){
+             var idx=$(this).data('id');
+             pageIndex=1;
+             isscroll=true; 
+             slidetype=idx;
+             $('.classibox').removeClass('active');
+              $(this).addClass('active').siblings('div').removeClass('active');
+              var sttr=$(this).children('img').attr('src');
+              $(this).children('img').attr('src','image/xialaclick.png');
+              $(this).siblings('div').children('img').attr('src','image/xiala.png');
+              if(gettoken){
+                var send={
+                    "token": gettoken,
+                    "sort_type":idx,
+                    "product_class_id":fl,
+                    "page":1,
+
+                }
+            }else{
+                var send={
+                    "sort_type":idx,
+                    "product_class_id":fl,
+                    "page":1,
+                }
+            }
+            if(sttr=='image/xialaclick.png'){
+                $('#main .detail div:nth-child(3)').children('img').attr('src','image/xiala.png');
+                send.sort=1;
+                gd=1;
+            }else{
+                $('#main .detail div:nth-child(3)').children('img').attr('src','image/xialaclick.png');
+                send.sort=2;
+                gd=2;
+            }
+            url({
+                url: 'index/getProductList',
+                data:send,
+                success: function (res) {
+                    console.log(res);
+                    totalpage=res.pageInfo.page_count;
+                    if(res.product_list!=''){
+                        datalist={
+                            res:res.product_list
+                        };
+                        $('.alllist h6').removeClass('active');
+                        $('.alllist ul').addClass('active');
+                        $('.alllist ul').html(template('prolist', datalist));
+                    }else{
+                        datalist={
+                            res:[]
+                        };
+                        $('.alllist h6').addClass('active');
+                        $('.alllist h6').html("暂无商品！");
+                        $('.alllist ul').removeClass('active');
+                    }
+                   
+                   
+                }
+            })
+            
+          });
+          //点击分类
+          $('#main .detail div:nth-child(4)').on('click',function(){
+            $(this).children('img').attr('src','image/xialaclick.png');
+            $(this).siblings('div').children('img').attr('src','image/xiala.png');
+            $(this).addClass('active').siblings('div').removeClass('active');
+            $('.classibox').addClass('active');
+            window.location.href = "#typehash";
+          });
+          $('.classibox').on('click',function(){
+            $(this).removeClass('active');
+          });
+          //分类列表选择
+          $('.alltype ul.fenlei:nth-child(1)').on('click','li',function(event){
+              event.stopPropagation();
+              event.preventDefault();
+              $(this).addClass('active');
+              pageIndex=1;
+              isscroll=true; 
+              slidetype=4;
+              $('.alltype ul.fenlei.classify li').removeClass('active');
+              $('.classibox').removeClass('active');
+              var idx=$(this).data('id');
+              var name=$(this).children('p').html();
+              $('.detail div:last-child').children('p').html(name);
+              typename=name;
+              fl=idx;
+            url({
+                url: 'index/getProductList',
+                data:{"token": gettoken,"sort_type":1,"product_class_id":idx,"page":1},
+                success: function (res) {
+                    console.log(res);
+                    totalpage=res.pageInfo.page_count;
+                    if(res.product_list!=''){
+                        datalist={
+                            res:res.product_list
+                        };
+                        $('.alllist h6').removeClass('active');
+                        $('.alllist ul').addClass('active');
+                        $('.alllist ul').html(template('prolist', datalist));
+                    }else{
+                        datalist={
+                            res:[]
+                        };
+                        $('.alllist h6').addClass('active');
+                        $('.alllist h6').html("暂无商品！");
+                        $('.alllist ul').removeClass('active');
+                    }
+                    
+                    
+                }
+            })
+            
+
+          })
+          $('.alltype ul.fenlei.classify').on('click','li',function(event){
+              event.stopPropagation();
+              event.preventDefault();
+              pageIndex=1;
+              isscroll=true; 
+              slidetype=4;
+              $('.alltype ul.fenlei:nth-child(1) li').removeClass('active');
+              $(this).addClass('active').siblings('li').removeClass('active');
+              $('.classibox').removeClass('active');
+              var idx=$(this).data('id');
+              var name=$(this).children('p').html();
+              $('.detail div:last-child').children('p').html(name);
+              typename=name;
+              fl=idx;
+              url({
+                url: 'index/getProductList',
+                data:{"token": gettoken,"sort_type":1,"product_class_id":idx,"page":1},
+                success: function (res) {
+                    console.log(res);
+                    totalpage=res.pageInfo.page_count;
+                    if(res.product_list!=''){
+                        datalist={
+                            res:res.product_list
+                        };
+                        $('.alllist h6').removeClass('active');
+                        $('.alllist ul').addClass('active');
+                        $('.alllist ul').html(template('prolist', datalist));
+                    }else{
+                        datalist={
+                            res:[]
+                        };
+                        $('.alllist h6').addClass('active');
+                        $('.alllist h6').html("暂无商品！");
+                        $('.alllist ul').removeClass('active');
+                    }
+                    
+                    
+                }
+              })
+              
+          })
+// 把跳转详情页的数据存起来
+function setStorage(){
+    var aList = JSON.stringify(datalist);
+    var aParam = {
+        page:pageIndex,  //当前页码
+        totalpage:totalpage,//总页码
+        top: $(window).scrollTop(),
+        gd:gd,
+        fl:fl,
+        slidetype:slidetype,
+        typename:typename
+    };
+    aParam = JSON.stringify(aParam);
+    sessionStorage.setItem('aList', aList);//sessionStorage只能存储string字符串
+    sessionStorage.setItem('aParam', aParam);
+}
+//点击搜索框
+$('#header .searchbox').on('click',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    //将当前数据存起来
+    setStorage();
+});
+//点击轮播图
+$('.swiper-wrapper').on('click','.swiper-slide a',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    //将当前数据存起来
+    setStorage();
+});
+//点击分类
+$('ul.list').on('click','li a',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    //将当前数据存起来
+    setStorage();
+});
+//点击详情页
+$('.alllist ul').on('click','li a',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    //将当前数据存起来
+    setStorage();
+});
+
+
+
+
+
+//加载下一页数据
+$(document).ready(function (){      
+    var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)      
+    var nScrollTop = 0;  //滚动到的当前位置      
+    var nDivHight = $("#main").height();
+          
+    $("#main").scroll(function(){  
+        if(isscroll==true){
+        nScrollHight = $(this)[0].scrollHeight;
+        nScrollTop = $(this)[0].scrollTop;   
+        if(nScrollTop + nDivHight >= nScrollHight){
+            isscroll=false; 
+            console.log(pageIndex);
+            var newPage = pageIndex + 1;
+            pageIndex=newPage;
+            if(datalist.res!=''){
+                if(totalpage>=pageIndex){
+                    if(slidetype==1 || slidetype==2){
+                        var send={"token": gettoken,"sort_type":slidetype,"product_class_id":fl,"page":newPage,}
+                    }
+                    if(slidetype==3){
+                        var send={"token": gettoken,"sort_type":slidetype,"sort":gd,"product_class_id":fl,"page":newPage,}
+                    }
+                    if(slidetype==4){
+                        var send={"token": gettoken,"sort_type":1,"product_class_id":fl,"page":newPage,}
+                    }
+                    url({
+                        url: 'index/getProductList',
+                        data: send,
+                        success: function (res) { 
+                            console.log(res);
+                            isscroll=true; 
+                            if (res.product_list.length >= 1) {
+                                var data = datalist.res.concat(res.product_list);
+                                datalist.res=data;
+                                console.log(datalist);
+                                $('.alllist ul').html(template('prolist', datalist));
+                                 
+                            }  
+                        }
+                    })
+                }else{
+                    layer.msg('数据已加载完!');
+                }
+                
+            }    
+        }
+
+        }
+         });    
+          }); 
+    
+
+         
+    </script>
+</body>
+</html>

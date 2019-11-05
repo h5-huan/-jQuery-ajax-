@@ -1,0 +1,26 @@
+body{background: #fff;}
+.headtitle{width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #ffffff;position: fixed;top:0;left: 0;text-align: center;}
+.headtitle p{color: #333333;font-size:0.84rem;text-align: center;}
+.headtitle img{width: 0.49rem;height: 0.84rem;position: absolute;top:0.58rem;left:4%;}
+#all{position: absolute;top:2rem;width: 100%; box-sizing: border-box;  bottom:0;  left: 0;  right: 0;overflow-y: scroll;}
+.inputbox{width: 80%;margin: 0 auto; height: 1.63rem;line-height: 1.63rem;margin-top:0.93rem;border-bottom: 1px solid #d6d6d6;}
+.inputbox p{font-size:0.69rem;color: #333333;float: left;}
+.inputbox input.yzm{width: 46%;height: 1.63rem;float: left;color: #333333;font-size:0.69rem;}
+.inputbox span{float: right;color: #14A85D;font-size:0.69rem;}
+.inputbox input.pwd{width: 79%;height: 1.63rem;float: right;color: #333333;font-size:0.69rem;}
+.czpwd{width: 86%;height: 2.05rem;line-height: 2.05rem;text-align: center;font-size:0.75rem;color: #fff; background:#14a85d;border-radius: 0.14rem;margin:2.73rem auto;}
+/* 弹窗 */
+.screen{display: none;width: 100%; height: 100%;position: fixed;top: 0;  left: 0; z-index: 1000;background:rgba(0,0,0,.5); overflow: hidden; vertical-align: middle;}
+.screen.active{display: block;}
+.screen .screenbox{width: 72%;background: #fff;border-radius: 0.46rem;position:fixed;top:30%; left: 14%;z-index: 1001;overflow: hidden;}
+.screen .screenbox h1{font-size: 0.84rem;color: #333333;font-weight: normal;line-height: 3rem;text-align: center;}
+.screen .screenbox p{font-size: 0.65rem;color: #333333;text-align: center;margin-bottom: 0.69rem;}
+.screen .screenbox .qrbtn{width: 100%;height: 2rem;line-height: 2rem;border-top:1px solid #e6e6e6;text-align: center;font-size: 0.75rem;color: #157EFB;}
+
+
+
+
+
+
+
+

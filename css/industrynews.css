@@ -1,0 +1,19 @@
+body{background: #f0f0f5;}
+.headtitle{width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #ffffff;position: fixed;top:0;left: 0;text-align: center;}
+.headtitle img{width: 0.49rem;height: 0.84rem;position: absolute;top:0.58rem;left:4%;}
+.headtitle p{color: #333333;font-size:0.84rem;text-align: center;}
+#all{position: absolute;top:2rem;width: 100%; box-sizing: border-box;  bottom:0;  left: 0;  right: 0;overflow-y: scroll;}
+.detailss{width: 100%;overflow: hidden;padding: 0.7rem 4%;color: #666666;font-size: 0.76rem;line-height: 1rem;}
+/* .detailss p{color: #666666;font-size: 0.76rem;line-height: 1rem;} */
+.list{width: 100%;padding: 0.46rem 4%;background: #fff;margin-top: 0.46rem;}
+.list a{display: block;width: 100%;overflow: hidden;}
+.list .titbox{width: 100%;overflow: hidden;margin-bottom: 0.46rem;}
+.list .titbox h1{color: #333333;font-size:0.75rem;float: left;font-weight: normal;width: 60%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.list .titbox span{color: #999999;font-size:0.56rem;float: right;}
+.list p{color: #666666;font-size:0.65rem;line-height:1.02rem;text-overflow: -o-ellipsis-lastline; overflow: hidden;text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2;-webkit-box-orient: vertical;}
+
+
+
+
+
+

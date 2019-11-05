@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" id="a">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/malldetail.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <script type="text/html" id="slide">
+        {{each product_images as value i}}
+            <div class="swiper-slide" data-id="{{value.id}}"><img src="{{value.img}}" alt=""/></div>
+        {{/each}}
+    </script>
+    <script type="text/html" id="item">
+        {{each res as value i}}
+        <div class="evaluate" data-id='{{value.geval_id}}'>
+            <div class="titbox">
+                <img src="{{value.avatar}}" alt=""/>
+                <h1>{{value.nickname}}</h1>
+                <span>{{value.create_time}}</span>
+            </div>
+            <p>{{value.content}}</p>
+        </div>
+        {{/each}}
+    </script>
+</head>
+<body>
+        <div class="headtitle">
+            <img src="image/project_back.png" alt="" onclick="goback()"/>
+            <p>商品详情</p>
+        </div>
+        <div class="maindtl">
+            <img src="image/project_back.png" alt="" class="goback active" onclick="goback()"/>
+            <div class="banner">
+                <!-- <img src="image/det_banner.jpg" alt=""/> -->
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+            </div>
+            <div class="write">
+                <p>上好抹茶鲜花饼上好抹茶鲜花饼上好抹茶鲜上好抹茶鲜花饼上好抹茶鲜上好抹茶鲜花饼上好抹茶鲜花饼上好抹茶鲜上好抹茶鲜花饼上好抹茶鲜上好抹茶鲜花</p>
+                <div class="money">
+                   <span>￥36</span>
+                   <img src="image/shoucang.png" alt="" onclick="shoucang()"/>
+                </div>
+            </div>
+            <div class="navbox">
+                <div class="nav active" data-id="1">商品详情</div>
+                <div class="nav" data-id="2">评价</div>
+            </div>
+            <div class="slidebox">
+                <!-- 商品详情 -->
+                <div class="cpxq active">
+                </div>
+                <!-- 评价 -->
+                <div class="allpj">
+                    <ul class="pjbtn">
+                        <li data-id='0'>
+                            <img src="image/radio_check.png" alt=""/>
+                            <span>全部</span>
+                        </li>
+                        <li data-id='1'>
+                            <img src="image/radio.png" alt=""/>
+                            <span>好评</span>
+                        </li>
+                        <li data-id='2'>
+                            <img src="image/radio.png" alt=""/>
+                            <span>中评</span>
+                        </li>
+                        <li data-id='3'>
+                            <img src="image/radio.png" alt=""/>
+                            <span>差评</span>
+                        </li>
+                    </ul>
+                    <div class="evaluatebox"></div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="footpay">
+            <div class="paynav white" onclick="addgouwuche()">
+                <div class="gwcbox">
+                    <img src="image/gouwuche.png" alt=""/>
+                    <span></span>
+                </div>
+                <p>加入购物车</p>
+            </div>
+            <div class="paynav green" onclick="gotopay()">
+                <p>立即购买</p>
+            </div>
+        </div>
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+var gettoken=localStorage.getItem('token');
+var iscollect;
+var proid;
+var pageIndex=1;
+var typeid;
+var pjscore=0;
+var datalist={
+    res:[]
+};
+var totalpage;//总页数
+var isscroll=true;  
+// 返回箭头
+function goback(){
+    console.log('11111');
+    window.history.back(-1); //适用于普通浏览器
+    //window.close();//适用于谷歌浏览器
+}
+$('body').on('click','.headtitle.active',function(){
+    console.log('11111');
+});
+
+//   立即购买
+function gotopay(){
+    if(gettoken){
+        location.href='confirmpay.html?cpid='+proid;
+    }else{
+        window.location.href="login.html";
+    }
+}
+
+
+$(function(){
+    console.log(getParams('idx'));
+    url({
+        url: 'index/productDetail',
+        data:{"token":gettoken,"product_id":getParams('idx')},
+        success: function (res) {
+            console.log(res);
+            $('.swiper-wrapper').html(template('slide', res));
+            var swiper = new Swiper('.swiper-container', {
+                autoplay: false,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    renderBullet: function (index, className) {
+                        return '<span class="' + className + '"></span>';
+                    },
+                },
+            });
+            $('.write p').html(res.product_name);
+            $('.slidebox .cpxq').html(res.content);
+            if(res.cart_num){
+                $('.footpay .paynav .gwcbox span').text(res.cart_num);
+                $('.footpay .paynav.white').addClass('active');
+            }else{
+                $('.footpay .paynav.white').removeClass('active');
+            }
+            
+            proid=res.product_id;
+            $('.write .money span').html('￥'+res.price);
+            if(res.is_collect==0){
+                iscollect=0;
+                $('.write .money img').attr('src','image/shoucang.png');
+            }else if(res.is_collect==1){
+                iscollect=1;
+                $('.write .money img').attr('src','image/shoucang_click.png');
+            }
+        }
+    })
+    //评价
+    url({
+        url: 'index/evaluateList',
+        data:{"token":gettoken,"product_id":getParams('idx'),"score":pjscore,"page":1},
+        success: function (res) {
+            console.log(res);
+            totalpage=res.pageInfo.page_count;
+            if(res.evaluate_list!=''){
+                datalist={
+                    res:res.evaluate_list
+                };
+                $('.allpj .evaluatebox').html(template('item', datalist));
+            }else{
+                datalist={
+                    res:[]
+                };
+                $('.evaluatebox').html("<p style='text-align:center;font-size:0.65rem;line-height:4rem;'>暂时还没有评价！</p>");
+            }
+            
+        }
+    })
+    $('.footpay .paynav').addClass('active');
+});
+//收藏
+function shoucang(){
+    console.log(iscollect);
+    if(gettoken){
+        if(iscollect==0){
+        //收藏
+        iscollect=1;
+        $('.write .money img').attr('src','image/shoucang_click.png');
+        url({
+            url: 'operate/collect',
+            data:{"token":gettoken,"product_id":proid},
+            success: function (res) {
+
+            }
+        })
+    }else if(iscollect==1){
+        //取消收藏
+        iscollect=0;
+        var delcollect='delcollect';
+        localStorage.setItem('delcollect',delcollect);
+        $('.write .money img').attr('src','image/shoucang.png');
+        url({
+            url: 'operate/cancelCollect',
+            data:{"token":gettoken,"product_id_arr":proid},
+            success: function (res) {
+                console.log(res);
+            }
+        })
+    }
+    }else{
+        window.location.href="login.html";
+    }
+    
+}
+//点击商品详情，评价
+$('.navbox .nav').on('click',function(){
+     var idx=$(this).data('id');
+     typeid=idx;
+     $(this).addClass('active').siblings().removeClass('active');
+     if(idx==1){
+         $('.slidebox .cpxq').addClass('active').siblings('.allpj').removeClass('active');
+     }else if(idx==2){
+        $('.slidebox .allpj').addClass('active').siblings('.cpxq').removeClass('active');
+     }
+});
+//点击评价状态
+$('.allpj .pjbtn li').on('click',function(){
+    $(this).children('img').attr('src','image/radio_check.png');
+    $(this).siblings('li').children('img').attr('src','image/radio.png');
+    // $('.maindtl')[0].scrollTop=0; 
+    var idx=$(this).data('id');
+    pjscore=idx;
+    pageIndex=1;
+    isscroll=true; 
+    var send={
+        "token":gettoken,
+        "product_id":getParams('idx'),
+        "score":idx,
+        "page":1
+    }
+    url({
+        url: 'index/evaluateList',
+        data:send,
+        success: function (res) {
+            console.log(res);
+            totalpage=res.pageInfo.page_count;
+            if(res.evaluate_list!=''){
+                datalist={
+                    res:res.evaluate_list
+                };
+                $('.allpj .evaluatebox').html(template('item', datalist));
+            }else{
+                datalist={
+                    res:[]
+                };
+                $('.evaluatebox').html("<p style='text-align:center;font-size:0.65rem;line-height:4rem;'>暂时还没有评价！</p>");
+            }
+        }
+    })
+});
+//点击加入购物车
+function addgouwuche(){
+    var test=$('.footpay .paynav .gwcbox span').text();
+    if(gettoken){
+        url({
+        url: 'operate/cart',
+        data:{
+            "token":gettoken,
+            "product_id":getParams('idx'),
+            "num":1
+        },
+        success: function (res) {
+            console.log(res);
+            $('.footpay .paynav').addClass('active');
+            $('.footpay .paynav .gwcbox span').text(res.cart_num);
+            layer.msg('加入购物车成功！');
+        }
+    })
+    }else{
+        window.location.href="login.html";
+    }
+    
+}
+//加载下一页数据
+$(document).ready(function (){      
+    var nScrollHight = 0; //滚动距离总长(注意不是滚动条的长度)      
+    var nScrollTop = 0;  //滚动到的当前位置      
+    var nDivHight = $(".maindtl").height();        
+    $(".maindtl").scroll(function(){    
+        if(isscroll==true){
+            nScrollHight = $(this)[0].scrollHeight;
+            nScrollTop = $(this)[0].scrollTop;   
+                if(nScrollTop + nDivHight >= nScrollHight){
+                    isscroll=false; 
+                    if(typeid==2){
+                        console.log(datalist.res);
+                        console.log('滑到底部了'+typeid);
+                        if(datalist.res!=''){
+                            if(totalpage>=pageIndex){
+                                var newPage = pageIndex + 1;
+                                pageIndex=newPage;
+                                console.log(pageIndex);
+                                url({
+                                    url: 'index/evaluateList',
+                                    data:{"token":gettoken,"product_id":getParams('idx'),"score":pjscore,"page":newPage},
+                                    success: function (res) {
+                                        console.log(res);
+                                        isscroll=true; 
+                                        if (res.evaluate_list.length >= 1) {
+                                            var data = datalist.res.concat(res.evaluate_list)
+                                            datalist.res=data;
+                                            console.log(datalist);
+                                            $('.allpj .evaluatebox').html(template('item', datalist));
+                                        }
+                                    }
+                                })
+                            }else {
+                                layer.msg('数据已加载完!');
+                            }
+                        }
+                    }
+            }   
+        }
+    });    
+});  
+
+
+
+
+
+
+
+
+
+
+
+//手指触屏事件
+var startX, startY, endX, endY;
+document.getElementById("a").addEventListener("touchstart", touchStart, false);
+document.getElementById("a").addEventListener("touchmove", touchMove, false);
+document.getElementById("a").addEventListener("touchend", touchEnd, false);
+function touchStart(event) {
+    console.log('手指开始滑动');
+    var touch = event.touches[0];
+    startY = touch.pageY;
+    startX = touch.pageX;
+}
+function touchMove(event) {
+    console.log('手指正在滑动');
+    var touch = event.touches[0];
+    endY = startY - touch.pageY;
+    endX = startX - touch.pageX;
+}
+function touchEnd(event) {
+    //100是给定触上下方向摸起始的坐标差
+    if (endY >100) {
+        // $(".div1").toggle();
+        console.log('滑动结束');
+        $('.headtitle').addClass('active');
+        
+        $('.maindtl img.goback').removeClass('active');
+    }else if(endY <=100){
+        $('.headtitle').removeClass('active');
+        $('.maindtl img.goback').addClass('active');
+    }
+    endY = 0;  
+}
+// $("html").attr("id","a")
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

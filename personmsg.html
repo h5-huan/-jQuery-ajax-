@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/personmsg.css"/>
+    <link rel="stylesheet" href="css/sendavatar.css"/>
+</head>
+<body>
+    <div class="headtitle">
+        <img src="image/fanhuifei.png" alt="" onclick="goback()"/>
+        <p>个人信息</p>
+        <span onclick="savemsg()">保存</span>
+    </div>
+    <div id="all">
+        <div class="nav martop">
+            <p>头像</p>
+            <div class="imgbox">
+                <!-- <input type="file" id="camera" multiple="multiple" capture="camera" accept="image/*" > -->
+                <img src="" alt="" id="imgUrl">
+            </div>
+        </div>
+        <div class="nav">
+            <p>昵称</p>
+            <input type="text" placeholder="请输入昵称" id="name">
+            <!-- <span id="name">小黑美</span> -->
+        </div>
+        <div class="nav">
+            <p>手机号码</p>
+            <span id='phone'></span>
+        </div>
+    </div>
+    <!-- 弹窗 -->
+    <div class="screen">
+        <div class="screenbox">
+            <div class="scrnav">
+                <input type="file" id="camera" multiple="multiple" capture="camera" accept="image/*" >
+                拍照
+            </div>
+            <div class="scrnav">
+                <input type="file" id="photo" multiple="multiple" accept="image/*" >
+                从相册中选择
+            </div>
+            <div class="scrnav quxiao" onclick="quxiao()">取消</div>
+        </div>
+    </div>
+  
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/iscroll-zoom.js"></script>
+	<script src="js/hammer.js"></script>
+    <script src="js/jquery.photoClip.js"></script>
+    <!-- <script src="js/base64image.js"></script> -->
+    <script src="js/exif.js"></script>
+    <script>
+        var gettoken=localStorage.getItem('token');
+         //点击换头像
+        //  function changehead(){
+        //      $('.screen').addClass('active');
+        //  }
+         //点击取消
+         function quxiao(){
+             $('.screen').removeClass('active');
+         }
+          // 返回箭头
+        function goback(){
+            window.history.back(-1);
+        }
+        $(function(){
+        var gettoken=localStorage.getItem('token');
+        if(gettoken){
+            url({
+            url: 'user/index',
+            data: {"client":'m',"token": gettoken},
+            success: function (res) {
+                console.log(res);
+                $('.nav img').attr('src',res.avatar);
+                $('#phone').html(res.mobile);
+                $('#name').val(res.nickname);
+                
+            }
+        })
+        }
+       });
+  //切换头像
+  $('.imgbox').on('click',function(){
+      $('.screen').addClass('active');
+  });
+  //点击拍照
+  $("#camera").change(function(e) {
+        $('.screen').removeClass('active');
+        console.log(e);
+        // var layerIndex = layer.load(1, { shade: [0.01, '#fff'] });
+        layer.msg('上传中...', {icon: 16,shade: [0.5, '#000000'],scrollbar: false,offset: '40%', time:100000}) ;
+        upload(e.target.files[0],{
+            success: function(res) {
+                layer.msg('头像上传成功！',{time: 1000,offset: '40%'});
+                console.log(res);
+                $("#imgUrl").attr("src",res.pic_url);
+            },
+            err: function(err) {
+                console.log(err)
+            }
+        })
+    });
+     //点击从相册中选择
+  $("#photo").change(function(e) {
+        $('.screen').removeClass('active');
+        console.log(e);
+        // var layerIndex = layer.load(1, { shade: [0.01, '#fff'] });
+           layer.msg('上传中...', {icon: 16,shade: [0.5, '#000000'],scrollbar: false,offset: '40%', time:100000}) ;
+           var file=e.target.files[0];
+           upload(e.target.files[0],{
+            success: function(res) {
+                layer.msg('头像上传成功！',{time: 1000,offset: '40%'});
+                console.log(res);
+                $("#imgUrl").attr("src",res.pic_url);
+            },
+            err: function(err) {
+                console.log(err)
+            }
+        })
+           if(file){
+//             var reader = new FileReader();
+
+// /*判断图片方向*/
+// var orientation = null;
+// EXIF.getData(file, function () {
+//     //EXIF.getAllTags(this);
+//     orientation = EXIF.getTag(this, 'Orientation');
+//     reader.readAsDataURL(file);
+// });
+
+// reader.onloadstart = function () {
+// };
+// reader.onerror     = function () {
+// };
+// reader.onload = function () {
+
+//     /*创建新的图片JS对象*/
+//     var image    = new Image();
+//     image.src    = this.result;
+//     image.onload = function () {
+//         var canvas = document.createElement("canvas");
+//         var scale  = image.width / image.height;
+//         if (orientation == 6) {
+//             //右转 90
+//             canvas.width  = image.height < widthInput ? image.height : widthInput;
+//             canvas.height = parseInt(canvas.width * scale);
+//             canvas.getContext("2d").rotate(90 * Math.PI / 180);
+//             canvas.getContext("2d").drawImage(image, 0, 0, image.width, image.height, 0, -canvas.width, canvas.height, canvas.width);
+//         } else if (orientation == 8) {
+//             //左转 90
+//             canvas.width  = image.height < widthInput ? image.height : widthInput;
+//             canvas.height = parseInt(canvas.width * scale);
+//             canvas.getContext("2d").rotate(-90 * Math.PI / 180);
+//             canvas.getContext("2d").drawImage(image, 0, 0, image.width, image.height, -canvas.height, 0, canvas.height, canvas.width);
+//         } else if (orientation == 3) {
+//             //右转 180
+//             canvas.width  = image.width < widthInput ? image.width : widthInput;
+//             canvas.height = parseInt(canvas.width / scale);
+//             canvas.getContext("2d").translate(canvas.width, 0);
+//             canvas.getContext("2d").scale(-1, 1);
+//             canvas.getContext("2d").translate(0, canvas.height);
+//             canvas.getContext("2d").scale(1, -1);
+//             canvas.getContext("2d").drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
+//         }
+//         var imageUrl = canvas.toDataURL("image/jpeg", 0.8);
+//         var blob = dataURLtoBlob(imageUrl);
+//         console.log(imageUrl);
+//         console.log(blob);
+        
+//         upload(blob,{
+//             success: function(res) {
+//                 layer.msg('头像上传成功！',{time: 1000,offset: '40%'});
+//                 console.log(res);
+//                 $("#imgUrl").attr("src",res.pic_url);
+//             },
+//             err: function(err) {
+//                 console.log(err)
+//             }
+//         })
+        
+//     };
+// };
+
+           }     
+
+        
+    });
+//base64格式图片 转为Blob  
+function dataURLtoBlob(base64Data) {
+	var byteString;
+	if(base64Data.split(',')[0].indexOf('base64') >= 0)
+		byteString = atob(base64Data.split(',')[1]);
+	else
+		byteString = unescape(base64Data.split(',')[1]);
+	var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
+	var ia = new Uint8Array(byteString.length);
+	for(var i = 0; i < byteString.length; i++) {
+		ia[i] = byteString.charCodeAt(i);
+	}
+	return new Blob([ia], {
+		type: mimeString
+    });
+}
+  
+       //保存
+       function savemsg(){
+           console.log('3133');
+            var name=$('#name').val();
+            var avater=$('.nav .imgbox img').attr('src');
+            console.log(avater);
+            var send={"token": gettoken,"avatar":avater,"nickname":name}
+            url({
+                url: 'user/profile',
+                data:send,
+                success: function (res) {
+                    console.log(res);
+                    layer.msg('保存成功!');
+                    var personalmsg='changemsg';
+                    localStorage.setItem('personalmsg',personalmsg);
+                    setTimeout('success()',1000);
+
+                }
+            })
+       }
+
+    function success(){
+        window.history.back(-1);
+    }  
+
+    </script>
+</body>
+<script>
+(function() {
+      var isPageHide = false;
+      window.addEventListener('pageshow', function() {
+        if (isPageHide) {
+          window.location.reload();
+        }
+      });
+      window.addEventListener('pagehide', function() {
+        isPageHide = true;
+      });
+})();
+</script>
+</html>

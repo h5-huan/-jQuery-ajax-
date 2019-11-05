@@ -1,0 +1,58 @@
+body{background: #f0f0f5;}
+.headtitle{width:100%;padding: 0 4%; height: 2rem;line-height: 2rem;background: #14a85d;position: fixed; top:0;left: 0;text-align: center;}
+.headtitle img{width: 0.49rem;height: 0.84rem;position: absolute;top:0.58rem;left:4%;}
+.headtitle p{color: #fff;font-size:0.84rem;text-align: center;}
+.maindtl{width: 100%; overflow: hidden;position: absolute;top:2rem;border-bottom: 1px solid #e6e6e6; box-sizing: border-box;  bottom:2.96rem;  left: 0;  right: 0;overflow-y: scroll;}
+.maindtl .shouhuo{width: 100%;padding:0.84rem 0.69rem;background: #fff;overflow: hidden;align-items:center;}
+.maindtl .shouhuo img.sh{width: 1.07rem;height: 1.07rem;float: left;margin-right:0.46rem;}
+.maindtl .shouhuo .addrbox{float: left;width: 88%;}
+.maindtl .shouhuo .addrbox h6{font-size: 0.75rem;color: #333333;font-weight: normal;}
+.maindtl .shouhuo .addrbox p{font-size: 0.65rem;color: #666666;margin-top:0.3rem;}
+.maindtl .shouhuo .addrbox p span{margin-right:0.69rem;}
+.maindtl .shouhuo img.more{width: 0.4rem;height:0.67rem;float: right;margin-top:0.7rem;}
+.product{width: 100%; overflow: hidden;padding:0.69rem 4%;background: #fff;margin: 0.46rem 0;}
+.product img{width: 2.33rem;height: 2.33rem;float: left;}
+.product .sp{width: 60%;float: left;height: 2.33rem;margin-left: 0.46rem;}
+.product .sp h6{ font-size: 0.65rem;color: #333333;font-weight: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.product .sp p{font-size: 0.56rem;color: #666666;margin-top: 0.46rem;}
+.product .price{width: 20%;font-size: 0.65rem;color: #EF4F1D;float: right;text-align: right;}
+.sendbox{width: 100%;overflow: hidden; background: #fff;}
+.sendbox .sendnav{width: 92%; margin-left: 4%;;border-bottom: 1px solid #e6e6e6; overflow: hidden;}
+.sendbox .sendnav h6{font-size: 0.6rem;color: #333333;line-height:2.19rem;font-weight: normal;float: left;}
+.sendbox .sendnav h5{display: block; width: 78%;font-size: 0.6rem;color: #333333;margin: 0.65rem 0 0.4rem 0;overflow: hidden;font-weight: normal;float: left;}
+.sendbox .sendnav .slbox{float: right;height:2.19rem;display: flex;flex-wrap: wrap;justify-content: space-around;align-items: center;}
+.sendbox .sendnav .slbox img{width:0.79rem;height:0.79rem;}
+.sendbox .sendnav .slbox span{font-size: 0.65rem;color: #333333;margin: 0 0.46rem;}
+.sendbox .sendnav p{font-size: 0.65rem;color: #333333;float: right;line-height:2.19rem;}
+.sendbox .sendnav .liuyan{width: 78%;height: 4.2rem;font-size: 0.65rem;color: #333333;margin: 0.75rem 0 0.4rem 0;}
+.sendbox .sendnav img.wx{width: 1.02rem;height: 0.95rem;float: left;margin: 0.69rem 0.46rem 0 0;}
+.sendbox .sendnav img.check{width: 0.93rem;height: 0.93rem;float: right;margin-top: 0.46rem;}
+.sendbox .sendnav img.zfb{width: 0.98rem;height: 0.98rem;float: left;margin:0.69rem 0.46rem 0 0;}
+.pricebox{width: 100%;line-height: 2.56rem;padding: 0 0.69rem;}
+.pricebox h5{text-align: right;font-size: 0.65rem;color: #333333;font-weight: normal;}
+.pricebox h5 i{font-style: normal;}
+.pricebox h5 span{font-size: 0.84rem;color: #FD5854;}
+.maindtl h4{width: 100%; overflow: hidden;padding:0 4% 0.46rem 4%;font-size: 0.65rem;color: #333333;font-weight: normal;}
+.footpay{width: 100%;height: 2.28rem;line-height: 2.28rem;position: fixed; bottom:0;left: 0;background: #14a85d;font-size: 0.69rem;color: #fff;text-align: center;}
+.alipaybox{width: 100%;height: 100%;}
+/* 弹窗 */
+.screen{display: none;width: 100%; height: 100%;position: fixed;top: 0;  left: 0; z-index: 1000;background:rgba(0,0,0,.5); overflow: hidden; vertical-align: middle;}
+.screen.active{display: block;}
+.screen .screenbox{width: 72%;background: #fff;border-radius: 0.46rem;position:fixed;top:30%; left: 14%;z-index: 1001;overflow: hidden;}
+.screen .screenbox h1{font-size: 0.84rem;color: #333333;font-weight: normal;line-height: 3rem;text-align: center;}
+.screen .screenbox p{font-size: 0.65rem;color: #333333;text-align: center;margin-bottom: 0.69rem;}
+.screen .screenbox .qrbtn{width: 100%;height: 2rem;line-height: 2rem;border-top:1px solid #e6e6e6;text-align: center;font-size: 0.75rem;color: #157EFB;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

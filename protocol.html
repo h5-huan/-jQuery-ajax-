@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/protocol.css"/>
+</head>
+<body>
+    <div class="headtitle">
+        <img src="image/fanhuifei.png" alt="" onclick="goback()"/>
+        <p>注册协议</p>
+    </div>
+    <div id="all">
+
+    </div>
+
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+         // 返回箭头
+         function goback(){
+            window.history.back(-1);
+        }
+        $(function(){
+            url({
+                url: 'common/getArticle',
+                data: {"type":1},
+                success: function (res) {
+                    console.log(res);
+                    $('.headtitle p').html(res.title);
+                    $('#all').html(res.content);
+                }
+            })
+        });
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/deliveaddress.css"/>
+    <script type="text/html" id="address">
+        {{each res as value i}}
+        <div class="list" data-id="{{value.address_id}}">
+                <h1>{{value.province_name}}{{value.city_name}}{{value.area_name}}{{value.address}}</h1>
+                <div class="msg">
+                    <p>{{value.name}}</p>
+                    <p>{{value.mob_phone}}</p>
+                </div>
+                <div class="addrbox">
+                    {{if value.is_default == 1}}
+                         <div class="check">
+                            <img src="image/queding.png" alt=""/>
+                            <p>默认地址</p>
+                         </div>
+                    {{/if}}
+                    
+                    <span class="sc" data-id="{{value.address_id}}">删除</span>
+                    <span class="bj" data-id="{{value.address_id}}">编辑</span>
+                </div>
+           </div>
+        {{/each}}
+    </script>
+</head>
+<body>
+    <div class="headtitle">
+        <img src="image/fanhuifei.png" alt="" onclick="goback()"/>
+        <p>收货地址</p>
+    </div>
+    <div id="all">
+        <div class="alladdr">
+          
+
+        </div>
+        <a href="addaddress.html?addrtype=add" class="addaddr">添加收货地址</a>
+    </div>
+    <!-- 弹窗 -->
+    <div class="screen">
+        <div class="screenbox">
+            <h1>是否确认删除</h1>
+            <div class="btnbox">
+                <div class="qrbtn" onclick="shsuccess()">确认</div>
+                <div class="qrbtn qx" onclick="qxsh()">取消</div>
+            </div>
+            
+        </div>
+    </div>
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+var gettoken=localStorage.getItem('token');
+var linktyper;
+var datalist={
+        res:[]
+    };
+var deleteid;    
+// 返回箭头
+function goback(){
+    window.history.back(-1);
+}
+$(function(){
+    // console.log(getParams('addrtype'));
+    if(getParams('addrtype')=='checkaddress'){
+        linktyper='checkaddress';
+    }
+    console.log(linktyper);
+    // 返回列表页时，取存储的sessionStorage数据，有，则取数据渲染页面，并滑到预期位置
+    var dList = JSON.parse(sessionStorage.getItem('dList'));
+    var dParam = JSON.parse(sessionStorage.getItem('dParam'));
+    var _ullist = JSON.parse(sessionStorage.getItem('ullist'));
+    console.log(dList,dParam,_ullist);
+    if (dList != null) {
+        var changedz=localStorage.getItem('changedz');
+        if(changedz=='changeaddr'){
+            window.location.reload();
+            localStorage.removeItem('changedz');
+        }else{
+            $('.alladdr').html(template('address', dList));
+            datalist=dList;
+            document.body.scrollTop = dParam.top;
+            
+        }
+        sessionStorage.removeItem('dList');
+        sessionStorage.removeItem('dParam');
+    }else{
+        url({
+            url: 'user/myAddress',
+            data:{"token":gettoken},
+            success: function (res) {
+                console.log(res);
+                datalist={
+                    res:res.address_list
+                };
+                $('.alladdr').html(template('address', datalist));
+            }
+        })
+    }
+});
+//点击收货列表
+$('.alladdr ').on('click','.list',function(){
+    if(linktyper=='checkaddress'){
+        var idx=$(this).data('id');
+        localStorage.setItem('savecheckaddrid',idx);
+        // $(".maindtl .shouhuo", window.parent.document).attr('data-addressid',idx);
+        // console.log(idx);
+        window.history.back();
+    }
+    
+});
+// 把跳转详情页的数据存起来
+function setStorage(){
+    var dList = JSON.stringify(datalist);
+    var dParam = {
+        top: $(window).scrollTop()
+    };
+    dParam = JSON.stringify(dParam);
+    sessionStorage.setItem('dList', dList);//sessionStorage只能存储string字符串
+    sessionStorage.setItem('dParam', dParam);
+}
+//点击编辑
+$('.alladdr').on('click','.list .addrbox span.bj',function(event){
+   event.stopPropagation();
+   event.preventDefault;
+   var idx=$(this).data('id');
+   location.href='addaddress.html?addid='+idx;
+   setStorage();
+});
+//添加收货地址
+$('#all a.addaddr').on('click',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    setStorage();
+});
+
+
+
+//点击删除
+$('.alladdr').on('click','.list .addrbox span.sc',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    var idx=$(this).data('id');
+    deleteid=idx;
+    $('.screen').addClass('active');
+  
+});
+//点击弹窗确认
+function shsuccess(){
+    $('.screen').removeClass('active');
+    url({
+        url: 'user/delAddress',
+        data:{
+            "token":gettoken,
+            "address_id":deleteid
+        },
+        success: function (res) {
+            console.log(res);
+            location.reload();
+        }
+    })
+}
+//点击弹窗取消
+function qxsh(){
+    $('.screen').removeClass('active');
+}
+
+</script>
+</body>
+<script type="text/javascript">
+(function() {
+      var isPageHide = false;
+      window.addEventListener('pageshow', function() {
+        var changedz=localStorage.getItem('changedz');
+        if(changedz=='changeaddr'){
+            if (isPageHide==true) {
+                window.location.reload();
+                
+            }
+        }
+      });
+      window.addEventListener('pagehide', function() {
+          isPageHide = true;
+        //   localStorage.removeItem('changedz');
+      });
+})();
+</script>
+</html>

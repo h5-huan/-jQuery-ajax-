@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/login.css"/>
+</head>
+<body>
+    <div class="headtitle">
+        <img src="image/fanhuifei.png" alt="" onclick="goback()"/>
+        <p>登录</p>
+    </div>
+    <div id="all">
+        <div class="logoimg">
+            <img src="image/list.jpg" alt="">
+        </div>
+        <div class="inputbox">
+            <input type="text" id='phone' placeholder="请输入手机号">
+            <img src="image/dldel.png" alt="" class="dldel">
+        </div>
+        <div class="inputbox">
+            <input type="password" id='pwd' placeholder="请输入密码">
+            <img src="image/eye_close.png" alt="" class="eyes">
+        </div>
+        <p class="wjmm">
+            <span onclick="forgetpwd()">忘记密码？</span>
+        </p>
+        <button class="loginbtn">登录</button>
+        <p class="ljzc">还没有账号？<a href="register.html">立即注册</a></p>
+    </div>
+
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+// 返回箭头
+function goback(){
+    window.history.back();
+}
+$(function(){
+    var logintype=localStorage.getItem('logintype');
+    var isoutlogin=localStorage.getItem('isoutlogin');
+    //获取之前的记住登录手机号密码
+    var rememberphone=localStorage.getItem('rememberphone');
+    var rememberpwd=localStorage.getItem('rememberpwd');
+    if(isoutlogin=='isoutlogin'){
+        if(logintype=='wjmm'){
+            $('#phone').val(rememberphone);
+        }else if(logintype=='czmm'){
+            $('#phone').val(rememberphone);
+            $('#pwd').val(rememberpwd);
+        }else{
+            $('#phone').val(rememberphone);
+            $('#pwd').val(rememberpwd);
+        }
+        localStorage.removeItem('logintype');
+    }
+    var phone=$('#phone').val();
+    var pwd=$('#pwd').val();
+    console.log(phone,pwd);
+    if(phone!='' && phone != null && phone.replace(/\s|\xA0/g, "") != "" && pwd!='' && pwd != null && pwd.replace(/\s|\xA0/g, "") != ""){
+        $('.loginbtn').addClass('active');
+        
+    }else{
+        $('.loginbtn').removeClass('active');
+    }
+    
+});
+
+
+//忘记密码
+function forgetpwd(){
+    location.href='forgetpwd.html?pagetype=wjmm';
+}
+$('body,.inputbox img.dldel,.inputbox img.eyes').bind("input propertychange",function(){
+    var phone=$('#phone').val();
+    var pwd=$('#pwd').val();
+    console.log(phone,pwd);
+    if(phone!='' && phone != null && phone.replace(/\s|\xA0/g, "") != "" && pwd!='' && pwd != null && pwd.replace(/\s|\xA0/g, "") != ""){
+        $('.loginbtn').addClass('active');
+        
+    }else{
+        $('.loginbtn').removeClass('active');
+    }
+});
+//点击手机号叉叉
+$('.inputbox img.dldel').on('click',function(){
+    $('#phone').val('');
+    $('.loginbtn').removeClass('active');
+});
+//点击密码眼睛
+$('.inputbox img.eyes').on('click',function(){
+    var attrimg=$(this).attr('src');
+    if(attrimg=='image/eye_close.png'){
+        $(this).attr('src','image/eye_open.png');
+        $('#pwd').attr('type','text');
+    }else{
+        $(this).attr('src','image/eye_close.png');
+        $('#pwd').attr('type','password');
+    }
+});
+//点击登录按钮
+$('.loginbtn').on('click',function(){
+    var phone=$('#phone').val();
+    var pwd=$('#pwd').val();
+    if($(this).hasClass('active')){
+        if(!validatePhone(phone)){
+            layer.msg('手机号格式不正确！');
+        }else{
+        url({
+            url: 'login/index',
+            data: {"mobile": phone,"password":pwd},
+            success: function (res) {
+                console.log(res);
+                let token = res.token;
+                let nickname = res.nickname;
+                let avatar = res.avatar;
+                let cartnum = res.cart_num;
+                localStorage.setItem('token',token);
+                localStorage.setItem('phone',phone);
+                localStorage.setItem('nickname',nickname);
+                localStorage.setItem('avatar',avatar);
+                localStorage.setItem('cartnum',cartnum);
+                localStorage.setItem('rememberphone',phone);//记住登录手机号密码
+                localStorage.setItem('rememberpwd',pwd);
+                localStorage.removeItem('isoutlogin');
+                
+                console.log(phone);
+                location.href='index.html';
+
+            }
+        })
+        }
+    }
+})
+
+
+
+
+
+    </script>
+</body>
+</html>

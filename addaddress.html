@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/addaddress.css"/>
+    <link rel="stylesheet" href="css/jquery-weui.min.css"/>
+    <style>
+    .weui-picker-modal .picker-items {text-align: left;}
+    </style>
+</head>
+<body>
+    <div class="headtitle">
+        <img src="image/fanhuifei.png" alt="" onclick="goback()"/>
+        <p>添加收货地址</p>
+    </div>
+    <div id="all">
+        <div class="allmsg">
+            <div class="inputbox">
+                <p>收货人：</p>
+                <input type="text" class="shr" id="shr" placeholder="请输入收货人">
+            </div>
+            <div class="inputbox">
+                <p>手机号码：</p>
+                <input type="text" class="sjhm" id="phone" placeholder="请输入手机号码">
+            </div>
+            <div class="inputbox">
+                <p>所在地区：</p>
+                <img src="image/more.png" alt=""/>
+                <input type="text" id="city-picker" placeholder="请选择省市区">
+            </div>
+            <textarea class="textaddr" id='xxdz' placeholder="请填写详细地址"></textarea>
+            <div class="mraddr">
+                <img src="image/zhifuweixuanzhong.png" alt=""/>
+                <p>设为默认地址</p>
+            </div>
+            <div class="save" onclick="saveaddrss()">保存</div>
+        </div>
+    </div>
+
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/jquery-weui.min.js"></script>
+    <script src="js/city-picker.min.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+var gettoken=localStorage.getItem('token');
+var dztype;
+var province;
+var cityname;
+var area;
+var addrid;
+var prevent=true;
+$("#city-picker").cityPicker({
+        title: "选择省市区/县",
+        onChange: function (picker, values, displayValues) {
+            // console.log(values);
+            province=displayValues[0];
+            cityname=displayValues[1];
+            area=displayValues[2];
+        }
+    });
+// 。。。。。。。。。。。。。。
+
+
+// 返回箭头
+function goback(){
+    window.history.back(-1);
+}
+$(function(){
+    var addtype=getParams('addrtype');
+    if(addtype=='add'){
+        dztype="add";
+        $('.headtitle p').html('添加收货地址');
+    }else{
+        dztype="bianji";
+        $('.headtitle p').html('编辑收货地址');
+    }
+    if(dztype=='bianji'){
+        addrid=getParams('addid');
+        url({
+            url: 'user/addressDetail',
+            data:{
+                "token":gettoken,
+                "address_id":addrid
+            },
+            success: function (res) {
+                console.log(res);
+                $('#shr').val(res.name);
+                $('#phone').val(res.mob_phone);
+                $('#city-picker').val(res.province_name+' '+res.city_name+' '+res.area_name);
+                $('#xxdz').val(res.address);
+                province=res.province_name;
+                cityname=res.city_name;
+                area=res.area_name;
+
+                if(res.is_default==0){
+                    $('.allmsg .mraddr img').attr('src','image/zhifuweixuanzhong.png');
+                }else if(res.is_default==1){
+                    $('.allmsg .mraddr img').attr('src','image/queding.png');
+                }
+                
+
+            }
+        })
+    }
+
+});
+//设为默认地址
+$('.allmsg .mraddr img').on('click',function(){
+    var sttr=$(this).attr('src');
+    if(sttr=='image/zhifuweixuanzhong.png'){
+        $(this).attr('src','image/queding.png');
+    }else{
+        $(this).attr('src','image/zhifuweixuanzhong.png');
+    }
+});
+//点击保存
+function saveaddrss(){
+    var shr=$('#shr').val();
+    var phone=$('#phone').val();
+    var address=$('#city-picker').val();
+    var xxdz=$('#xxdz').val();
+    var addimg=$('.allmsg .mraddr img').attr('src');
+    if(prevent){
+    if(shr=='' || shr == null || shr.replace(/\s|\xA0/g, "") == ""){
+        layer.msg('请输入收货人!');
+    }else if(phone=='' || phone == null || phone.replace(/\s|\xA0/g, "") == ""){
+        layer.msg('请输入手机号!');
+    }else if(!validatePhone(phone)){
+        layer.msg('手机号格式不正确！');
+    }else if(address=='' || address == null || address.replace(/\s|\xA0/g, "") == ""){
+        layer.msg('请选择所在地区!');
+    }else if(xxdz=='' || xxdz == null || xxdz.replace(/\s|\xA0/g, "") == ""){
+        layer.msg('请输入详细地址!');
+    }else{
+        prevent=false;
+        console.log(province,cityname,area);
+        console.log(dztype);
+        if(dztype=='add'){
+            var send={
+                "token":gettoken,
+                "name":shr,
+                "mob_phone":phone,
+                "province_name":province,
+                "city_name":cityname,
+                "area_name":area,
+                "address":xxdz
+             }
+        }else if(dztype=='bianji'){
+            var send={
+                "token":gettoken,
+                "address_id":addrid,
+                "name":shr,
+                "mob_phone":phone,
+                "province_name":province,
+                "city_name":cityname,
+                "area_name":area,
+                "address":xxdz
+             }
+        }
+        
+        if(addimg=='image/queding.png'){
+            send.is_default=1;
+        }else if(addimg=='image/zhifuweixuanzhong.png'){
+            send.is_default=0;
+        }
+        url({
+            url: 'user/addAddress',
+            data:send,
+            success: function (res) {
+                console.log(res);
+                prevent=true;
+                layer.msg('保存成功!');
+                var changedz='changeaddr';
+                localStorage.setItem('changedz',changedz);
+                setTimeout('success()',1000);
+
+            }
+        })
+    }
+    }
+}
+function success(){
+    window.history.back(-1);
+}
+   
+
+    </script>
+</body>
+</html>

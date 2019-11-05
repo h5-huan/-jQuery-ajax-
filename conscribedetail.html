@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/conscribedetail.css"/>
+</head>
+<body>
+    <div class="headtitle">
+        <img src="image/fanhuifei.png" alt="" onclick="goback()"/>
+        <p>募创客</p>
+    </div>
+    <div id="all">
+        <div class="describ">
+            <h1>运营总监（1人）</h1>
+            <h2>岗位职责：</h2>
+            <p class="desc">1.全面负责全国门店日常经营和管理工作，对经营和管理负责。</p>
+            <h2>岗位需求：</h2>
+            <p class="content">1.本科以上学历，同岗位经验3年以上，有知名品牌、潮牌连锁企业全国门店管理经验者佳；</p>
+        </div>
+        <div class="describ">
+            <p>可把简历发送至邮箱：hr@huishoubao.com.cn</p>
+            <p>联系电话：0755-88601139</p>
+            <p>地址：湖北省武汉市南九道威新软件园8号楼7楼</p>
+        </div>
+       
+    </div>
+
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+// 返回箭头
+function goback(){
+    window.history.back();
+}
+//点击岗位详情页
+$('.gangwei .post').on('click',function(){
+    location.href='conscribedetail.html';
+});
+$(function(){
+    var idx=getParams('idx');
+    url({
+        url: 'common/aboutUsDetail',
+        data: {"id":idx},
+        success: function (res) {
+            console.log(res);
+            $('.describ h1').html(res.name);
+            $('.describ p.desc').html(res.desc);
+            $('.describ p.content').html(res.content);
+        }
+    })
+});
+    </script>
+</body>
+</html>

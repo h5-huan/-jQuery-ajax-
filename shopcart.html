@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/shopcart.css"/>
+    <script type="text/html" id="item">
+        {{each res as value i}}
+        <div class="list" data-productid="{{value.product_id}}">
+                <img src="image/zhifuweixuanzhong.png" alt="" class="check" data-cartid="{{value.cart_id}}"/>
+                <img src="{{value.img}}" alt="" class="produc"/>
+                <div class="msgbox">
+                    <h1>{{value.name}}</h1>
+                    <p>￥<span>{{value.price}}</span></p>
+                </div>
+                <div class="numbox">
+                    <img src="image/jian.png" alt="" class="jian" data-cartid="{{value.cart_id}}"/>
+                    <p>{{value.num}}</p>
+                    <img src="image/jia.png" alt="" class="jia" data-cartid="{{value.cart_id}}"/>
+                </div>
+                <p class="listprice"></p>
+            </div>
+        {{/each}}
+    </script>
+</head>
+<body>
+        <div class="headtitle">
+            <p>购物车</p>
+            <span>管理</span>
+        </div>
+    <div id="shopmain">
+        
+    </div>
+    <div class="paybox">
+        <div class="qx">
+            <img src="image/zhifuweixuanzhong.png" alt=""/>
+            <p>全选</p>
+        </div>
+        <div class="heji" onclick="jiesuan()">结算</div>
+        <p class="hj">合计：<span>￥0</span></p> 
+    </div>
+
+    <!--脚部-->
+    <div id="foot">
+        <ul>
+            <li>
+                <a href="index.html">
+                    <img src="image/button1.png" alt=""/>
+                    <p>首页</p>
+                </a>
+            </li>
+            <li class="active">
+                <a href="#">
+                        <img src="image/button2_click.png" alt=""/>
+                    <p>购物车</p>
+                </a>
+            </li>
+            <li>
+                <a href="personal.html">
+                        <img src="image/button3.png" alt=""/>
+                    <p>我的</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 弹窗 -->
+    <div class="screen">
+        <div class="screenbox">
+            <h1>是否确认删除</h1>
+            <div class="btnbox">
+                <div class="qrbtn" onclick="shsuccess()">确认</div>
+                <div class="qrbtn qx" onclick="qxsh()">取消</div>
+            </div>
+            
+        </div>
+    </div>
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="layer-v3.0.3/layer-v3.0.3/layer/layer.js"></script>
+    <script src="js/template.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+var gettoken=localStorage.getItem('token');
+var pageIndex=1;
+var datalist={
+    res:[]
+};
+var cartsrr=[];
+ $(function(){
+    if(gettoken){
+        url({
+        url: 'operate/myCart',
+        data:{"token":gettoken,"page":1},
+        success: function (res) {
+            console.log(res);
+            if(res.cart_list==''){
+                $('#shopmain').append("<p style='text-align:center;font-size:0.65rem;line-height:5rem;'>您的购物车还没有商品哦～</p>");
+                $('.headtitle span').css('display','none');
+                $('.paybox').css('display','none');
+            }else{
+                datalist={
+                    res:res.cart_list
+                };
+                $('#shopmain').html(template('item', datalist));
+                var arr=$('#shopmain .list');
+                for(var i=0;i<arr.length;i++){
+                    var price=parseFloat($(arr[i]).find('.msgbox p span').html());
+                    var num=parseFloat($(arr[i]).children('.numbox').children('p').html());
+                    var ml=(num*price).toFixed(2);
+                    $(arr[i]).children('p.listprice').html(ml);
+                }
+            }
+            
+        }
+    })
+    }
+    
+ });   
+ //点击到详情页
+ $('#shopmain').on('click','.list',function(){
+     var idx=$(this).data('productid');
+     location.href='malldetail.html?idx='+idx;
+ });
+//数量加
+$('#shopmain').on('click','.list .numbox img.jia',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    var that=$(this);
+    var cartid=$(this).data('cartid');
+    url({
+        url: 'operate/updateCart',
+        data:{"token":gettoken,"cart_id":cartid,"type":1,"num":1},
+        success: function (res) {
+            console.log(res);
+            var n=res.num;
+            that.siblings('p').text(res.num);
+            var price=that.parent('.numbox'). siblings('.msgbox').find('p span').html();
+            var onetotal=(n*price).toFixed(2); //总价钱
+            that.parent('.numbox').siblings('p.listprice').html(onetotal);
+            money();
+        }
+    })
+});
+//数量减
+$('#shopmain').on('click','.list .numbox img.jian',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    var that=$(this);
+    var cartid=$(this).data('cartid');
+    url({
+        url: 'operate/updateCart',
+        data:{"token":gettoken,"cart_id":cartid,"type":2,"num":1},
+        success: function (res) {
+            console.log(res);
+            var n=res.num;
+            that.siblings('p').text(res.num);
+            var price=that.parent('.numbox'). siblings('.msgbox').find('p span').html();
+            var onetotal=(n*price).toFixed(2); //总价钱
+            that.parent('.numbox').siblings('p.listprice').html(onetotal);
+            money();
+        }
+    })
+});
+
+//选中商品
+$("#shopmain").on('click','.list img.check',function(event){
+    event.stopPropagation();
+    event.preventDefault;
+    var n=$('.list img.check').length;
+    if($(this).hasClass('active')){
+        $(this).removeClass('active');
+        $(this).attr('src','image/zhifuweixuanzhong.png');
+        var totalimg=$('.list img.check.active').length;
+    }else{
+        $(this).addClass('active');
+        $(this).attr('src','image/queding.png');
+        var totalimg=$('.list img.check.active').length;
+    }
+    // console.log(n);
+    // console.log(totalimg);
+    if(n>totalimg){
+        $('.paybox .qx img').attr('src','image/zhifuweixuanzhong.png');
+    }else{
+        $('.paybox .qx img').attr('src','image/queding.png');
+    }
+    money();
+})
+//点击全选
+$('.paybox .qx img').on('click',function(){
+    var imgattr=$(this).attr('src');
+    if(imgattr=='image/zhifuweixuanzhong.png'){
+        $('.paybox .qx img').attr('src','image/queding.png');
+        $(".list img.check").attr('src','image/queding.png');
+        $(".list img.check").addClass('active');
+    }else if(imgattr=='image/queding.png'){
+        $('.paybox .qx img').attr('src','image/zhifuweixuanzhong.png');
+        $(".list img.check").attr('src','image/zhifuweixuanzhong.png');
+        $(".list img.check").removeClass('active');
+    }
+    money();
+    
+});
+
+//金额结算
+function money(){
+    var moneyarr=$('#shopmain .list img.check.active');
+        for(var i=0,total=0;i<moneyarr.length;i++){
+            var aa=parseFloat($(moneyarr[i]).siblings('p.listprice').html());
+            total=parseFloat(total);
+            parseFloat(total+=aa);
+        }
+        $('.paybox p span').html("￥"+total);
+}
+//点击头部管理、完成
+$('.headtitle span').on('click',function(){
+    if($(this).text()=='管理'){
+        $(this).text('完成');
+        $('.paybox p.hj').css('display','none');
+        $('.paybox .heji').html('删除');
+        $('#shopmain .list img.check').removeClass('active');
+        $('#shopmain .list img.check').attr('src','image/zhifuweixuanzhong.png');
+        $('.paybox .qx img').attr('src','image/zhifuweixuanzhong.png');
+    }else if($(this).text()=='完成'){
+        $(this).text('管理');
+        $('.paybox p.hj').css('display','block');
+        $('.paybox .heji').html('结算');
+        $('#shopmain .list img.check').removeClass('active');
+        $('#shopmain .list img.check').attr('src','image/zhifuweixuanzhong.png');
+        $('.paybox .qx img').attr('src','image/zhifuweixuanzhong.png');
+    }
+    money();
+});  
+//点击结算或删除
+function jiesuan(){
+    var test=$('.paybox .heji').html();
+    var imgattr=$('#shopmain .list img.check.active').length;
+    var xzap=$('#shopmain .list img.check.active');
+    for(var i=0;i<xzap.length;i++){
+        var idx=$(xzap[i]).data('cartid');
+        cartsrr.push(idx);
+    }
+    console.log(cartsrr);
+    if(test=='结算'){
+        if(imgattr==0){
+            layer.msg('请选择商品!');
+        }else{
+            location.href='confirmpay.html?sendproid='+cartsrr;
+        }
+    }else{
+        //删除
+        if(imgattr==0){
+            layer.msg('请选择要删除的商品!');
+        }else{
+            $('.screen').addClass('active');
+        }
+
+    }
+}
+//点击弹窗确认
+function shsuccess(){
+    $('.screen').removeClass('active');
+    url({
+        url: 'operate/delCart',
+        data: {"token": gettoken,"cart_id_arr": cartsrr,},
+        success: function (res) {
+            location.reload();
+            pageIndex=1;
+        }
+    })
+}
+//点击弹窗取消
+function qxsh(){
+    $('.screen').removeClass('active');
+}
+
+//加载下一页数据
+// $(document).ready(function (){      
+//     var nScrollHight = 0;    
+//     var nScrollTop = 0;    
+//     var nDivHight = $("#shopmain").height();        
+//     $("#shopmain").scroll(function(){       
+//         nScrollHight = $(this)[0].scrollHeight;
+//         nScrollTop = $(this)[0].scrollTop;   
+//         if(nScrollTop + nDivHight >= nScrollHight){
+//             console.log('滑到底部了');
+//             var newPage = pageIndex + 1;
+//             pageIndex=newPage;
+//             console.log(pageIndex);
+//             url({
+//                 url: 'operate/myCart',
+//                 data:{"token":gettoken,"page":newPage},
+//                 success: function (res) {
+//                     console.log(res);
+//                     if (res.cart_list.length >= 1 && pageIndex <= res.pageInfo.page_count) {
+//                     var data = datalist.res.concat(res.cart_list)
+//                         datalist.res=data;
+//                         console.log(datalist);
+//                     } else {
+//                         layer.msg('数据已加载完!');
+//                     }
+//                         $('#shopmain').html(template('item', datalist));
+//                         var arr=$('#shopmain .list');
+//                         for(var i=0;i<arr.length;i++){
+//                             var price=parseFloat($(arr[i]).find('.msgbox p span').html());
+//                             var num=parseFloat($(arr[i]).children('.numbox').children('p').html());
+//                             var ml=(num*price).toFixed(2);
+//                             $(arr[i]).children('p.listprice').html(ml);
+//                         }
+//                 }
+//     })
+//         }   
+        
+//          });    
+//           }); 
+
+
+
+
+
+
+    </script>
+</body>
+<script type="text/javascript">
+(function() {
+      var isPageHide = false;
+      window.addEventListener('pageshow', function() {
+        var shopsubmit=localStorage.getItem('shopsubmit');
+        if(shopsubmit=='qdsubmit'){
+            if (isPageHide) {
+                window.location.reload();
+                localStorage.removeItem('shopsubmit');
+            }
+        }
+      });
+      window.addEventListener('pagehide', function() {
+          isPageHide = true;
+      });
+})();
+    // (function() {
+    //   var isPageHide = false;
+    //   window.addEventListener('pageshow', function() {
+    //     if (isPageHide) {
+    //       window.location.reload();
+    //     }
+    //   });
+    //   window.addEventListener('pagehide', function() {
+    //     isPageHide = true;
+    //   });
+    // })();
+</script>
+</html>
